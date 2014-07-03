@@ -278,7 +278,7 @@ namespace AdminRole.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.Actice = true;
             ViewBag.KratView = String.IsNullOrEmpty(sortOrder) ? "krat_desc" : "";
-
+            //Test
             try
             {
                 using (var dbKrat = new userDbEntities())
