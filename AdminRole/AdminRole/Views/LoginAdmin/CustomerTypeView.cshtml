@@ -1,0 +1,73 @@
+﻿@model PagedList.IPagedList<AdminRole.Models.CustomType>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"/>
+@{
+    ViewBag.Title = "Message Viewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="center-table">
+
+        @using (Html.BeginForm("CustomerTypeView", "LoginAdmin", FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="search_field">
+                Find destination type by name: 
+                <br/>
+                @Html.TextBox("searchStringCust", ViewBag.CurrentFilterCustomer as string, new {@style = "width: 200px;"})
+                <input class="gumbSearch" type="submit" value="Search"/>
+            
+            
+            <input class="gumb_create_new3" type="button" value="Add New Customer Type" onclick="Redirect()"/> 
+            <script type="text/javascript">
+                function Redirect() {
+                    var url = "@Url.Action("CreateNewCustomerType")";
+                    location.href = url;
+                }
+            </script>
+            
+            <input class="gumb_back_to-edit" type="button" value="Back to Edit Menu" onclick="RedirectToEdit()"/> 
+            <script type="text/javascript">
+                function RedirectToEdit() {
+                var url = "@Url.Action("Registracija")";
+                location.href = url;
+                }
+            </script>
+    
+            </div>
+
+            
+         }
+
+            <div class="tabelaSolr">
+            <table class="dani-tabela">
+                <thead>
+                    <tr>
+                        <th>
+                            Customer Type ID
+                        </th>
+                        <th>
+                            Customer Type Name
+                            @*@Html.ActionLink("Customer Type", "CustomerTypeView", new {sortOrderCust = ViewBag.CustView, currentFilterCust=ViewBag.CurrentFilterCustomer})*@
+                        </th>
+                    </tr>
+                </thead>
+                @foreach (var use in Model)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => use.Id_NewCustomerType)</td>
+                            <td>@Html.DisplayFor(modelItem => use.CustomerType)</td>
+                            <td>@Html.ActionLink("Delete", "DeleteCustomerType", new { id = use.Id_NewCustomerType })</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+        <br/>
+        <div class="pagerPosition">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, pageCust => Url.Action("CustomerTypeView", new { pageCust, sortOrderCust = ViewBag.CurrentSortCust, currentFilterCust = ViewBag.CurrentFilterCustomer }))
+        </div>  
+    @*</div>*@
+</div>

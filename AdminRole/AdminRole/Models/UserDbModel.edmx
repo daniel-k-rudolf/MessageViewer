@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="userDbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="userDbModelStoreContainer">
+          <EntitySet Name="CustomerTable" EntityType="userDbModel.Store.CustomerTable" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CustomType" EntityType="userDbModel.Store.CustomType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="KraticeTable" EntityType="userDbModel.Store.KraticeTable" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UsersTable" EntityType="userDbModel.Store.UsersTable" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="VlogaUporabnika" EntityType="userDbModel.Store.VlogaUporabnika" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_CustomerTable_UsersTable" Association="userDbModel.Store.FK_CustomerTable_UsersTable">
+            <End Role="CustomType" EntitySet="CustomType" />
+            <End Role="CustomerTable" EntitySet="CustomerTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsersTable_VlogaUporabnika" Association="userDbModel.Store.FK_UsersTable_VlogaUporabnika">
+            <End Role="VlogaUporabnika" EntitySet="VlogaUporabnika" />
+            <End Role="UsersTable" EntitySet="UsersTable" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="CustomerTable">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Customer" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomType">
+          <Key>
+            <PropertyRef Name="Id_NewCustomerType" />
+          </Key>
+          <Property Name="Id_NewCustomerType" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerType" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KraticeTable">
+          <Key>
+            <PropertyRef Name="Id_K" />
+          </Key>
+          <Property Name="Id_K" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Kratica" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="OpisSlo" Type="varchar" MaxLength="200" />
+          <Property Name="OpisAng" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="UsersTable">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Roles" Type="int" Nullable="false" />
+          <Property Name="TimeZoneId" Type="nvarchar(max)" />
+          <Property Name="passwordSalt" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VlogaUporabnika">
+          <Key>
+            <PropertyRef Name="Id_Vloga" />
+          </Key>
+          <Property Name="Id_Vloga" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CustomerTable_UsersTable">
+          <End Role="CustomType" Type="userDbModel.Store.CustomType" Multiplicity="1" />
+          <End Role="CustomerTable" Type="userDbModel.Store.CustomerTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomType">
+              <PropertyRef Name="Id_NewCustomerType" />
+            </Principal>
+            <Dependent Role="CustomerTable">
+              <PropertyRef Name="Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UsersTable_VlogaUporabnika">
+          <End Role="VlogaUporabnika" Type="userDbModel.Store.VlogaUporabnika" Multiplicity="1" />
+          <End Role="UsersTable" Type="userDbModel.Store.UsersTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VlogaUporabnika">
+              <PropertyRef Name="Id_Vloga" />
+            </Principal>
+            <Dependent Role="UsersTable">
+              <PropertyRef Name="Roles" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="userDbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="userDbEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="UsersTables" EntityType="userDbModel.UsersTable" />
+          <EntitySet Name="CustomerTables" EntityType="userDbModel.CustomerTable" />
+          <EntitySet Name="CustomTypes" EntityType="userDbModel.CustomType" />
+          <AssociationSet Name="FK_CustomerTable_UsersTable" Association="userDbModel.FK_CustomerTable_UsersTable">
+            <End Role="UsersTable" EntitySet="UsersTables" />
+            <End Role="CustomerTable" EntitySet="CustomerTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerTable_UsersTable1" Association="userDbModel.FK_CustomerTable_UsersTable1">
+            <End Role="CustomType" EntitySet="CustomTypes" />
+            <End Role="CustomerTable" EntitySet="CustomerTables" />
+          </AssociationSet>
+          <EntitySet Name="KraticeTables" EntityType="userDbModel.KraticeTable" />
+          <EntitySet Name="VlogaUporabnikas" EntityType="userDbModel.VlogaUporabnika" />
+          <AssociationSet Name="FK_UsersTable_VlogaUporabnika" Association="userDbModel.FK_UsersTable_VlogaUporabnika">
+            <End Role="VlogaUporabnika" EntitySet="VlogaUporabnikas" />
+            <End Role="UsersTable" EntitySet="UsersTables" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="UsersTable">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Roles" Type="Int32" Nullable="false" />
+          <Property Name="TimeZoneId" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="passwordSalt" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="CustomerTables" Relationship="userDbModel.FK_CustomerTable_UsersTable" FromRole="UsersTable" ToRole="CustomerTable" />
+          <NavigationProperty Name="VlogaUporabnika" Relationship="userDbModel.FK_UsersTable_VlogaUporabnika" FromRole="UsersTable" ToRole="VlogaUporabnika" />
+        </EntityType>
+        <EntityType Name="CustomerTable">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Type="Int32" Name="CustomerID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Int32" Name="UserId" Nullable="false" />
+          <Property Type="Int32" Name="Customer" Nullable="false" />
+          <NavigationProperty Name="UsersTable" Relationship="userDbModel.FK_CustomerTable_UsersTable" FromRole="CustomerTable" ToRole="UsersTable" />
+          <NavigationProperty Name="CustomType" Relationship="userDbModel.FK_CustomerTable_UsersTable1" FromRole="CustomerTable" ToRole="CustomType" />
+        </EntityType>
+        <EntityType Name="CustomType">
+          <Key>
+            <PropertyRef Name="Id_NewCustomerType" />
+          </Key>
+          <Property Type="Int32" Name="Id_NewCustomerType" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="CustomerType" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CustomerTables" Relationship="userDbModel.FK_CustomerTable_UsersTable1" FromRole="CustomType" ToRole="CustomerTable" />
+        </EntityType>
+        <Association Name="FK_CustomerTable_UsersTable">
+          <End Type="userDbModel.UsersTable" Role="UsersTable" Multiplicity="1" />
+          <End Type="userDbModel.CustomerTable" Role="CustomerTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="CustomerTable">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerTable_UsersTable1">
+          <End Type="userDbModel.CustomType" Role="CustomType" Multiplicity="1" />
+          <End Type="userDbModel.CustomerTable" Role="CustomerTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomType">
+              <PropertyRef Name="Id_NewCustomerType" />
+            </Principal>
+            <Dependent Role="CustomerTable">
+              <PropertyRef Name="Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="KraticeTable">
+          <Key>
+            <PropertyRef Name="Id_K" />
+          </Key>
+          <Property Type="Int32" Name="Id_K" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Kratica" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Type="String" Name="OpisSlo" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OpisAng" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="VlogaUporabnika">
+          <Key>
+            <PropertyRef Name="Id_Vloga" />
+          </Key>
+          <Property Type="Int32" Name="Id_Vloga" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Naziv" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UsersTables" Relationship="userDbModel.FK_UsersTable_VlogaUporabnika" FromRole="VlogaUporabnika" ToRole="UsersTable" />
+        </EntityType>
+        <Association Name="FK_UsersTable_VlogaUporabnika">
+          <End Type="userDbModel.VlogaUporabnika" Role="VlogaUporabnika" Multiplicity="1" />
+          <End Type="userDbModel.UsersTable" Role="UsersTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VlogaUporabnika">
+              <PropertyRef Name="Id_Vloga" />
+            </Principal>
+            <Dependent Role="UsersTable">
+              <PropertyRef Name="Roles" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="userDbModelStoreContainer" CdmEntityContainer="userDbEntities">
+          <EntitySetMapping Name="UsersTables">
+            <EntityTypeMapping TypeName="userDbModel.UsersTable">
+              <MappingFragment StoreEntitySet="UsersTable">
+                <ScalarProperty Name="TimeZoneId" ColumnName="TimeZoneId" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="Roles" ColumnName="Roles" />
+                <ScalarProperty Name="passwordSalt" ColumnName="passwordSalt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerTables">
+            <EntityTypeMapping TypeName="userDbModel.CustomerTable">
+              <MappingFragment StoreEntitySet="CustomerTable">
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomTypes">
+            <EntityTypeMapping TypeName="userDbModel.CustomType">
+              <MappingFragment StoreEntitySet="CustomType">
+                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+                <ScalarProperty Name="Id_NewCustomerType" ColumnName="Id_NewCustomerType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KraticeTables">
+            <EntityTypeMapping TypeName="userDbModel.KraticeTable">
+              <MappingFragment StoreEntitySet="KraticeTable">
+                <ScalarProperty Name="OpisAng" ColumnName="OpisAng" />
+                <ScalarProperty Name="OpisSlo" ColumnName="OpisSlo" />
+                <ScalarProperty Name="Kratica" ColumnName="Kratica" />
+                <ScalarProperty Name="Id_K" ColumnName="Id_K" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VlogaUporabnikas">
+            <EntityTypeMapping TypeName="userDbModel.VlogaUporabnika">
+              <MappingFragment StoreEntitySet="VlogaUporabnika">
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="Id_Vloga" ColumnName="Id_Vloga" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams />
+  </Designer>
+</edmx:Edmx>

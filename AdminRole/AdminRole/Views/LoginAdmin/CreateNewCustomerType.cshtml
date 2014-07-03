@@ -1,0 +1,37 @@
+﻿@model AdminRole.Models.CustomerType
+@{
+    ViewBag.Title = "Message Viewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="prijavno-okno_create-customer">
+        <fieldset>
+            <legend>Create New Customer Type</legend>
+            
+            <label>Customer Type:</label>
+            <div class="editor-label">
+                @Html.TextBoxFor(u => u.CustomType)
+                @Html.ValidationMessageFor(u => u.CustomType)
+            </div>
+            
+            <input class="gumb_create-customer" type="submit" value="Create New Destination Type"/>
+            @Html.HiddenFor(model => model.IdNewType)
+            <div>   
+                <input class="gumb_back_to-edit2" type="button" value="Back To Create Menu" onclick="Redirect()"/>
+                <script type="text/javascript">
+                    function Redirect() {
+                            var url = "@Url.Action("CustomerTypeView")";
+                            location.href = url;
+                        }
+                </script>
+            </div> 
+        </fieldset>
+       @Html.ValidationSummary(false)
+    </div>
+    
+}
+

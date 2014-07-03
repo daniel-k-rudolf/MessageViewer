@@ -1,0 +1,42 @@
+﻿@model AdminRole.Models.Users
+
+@{
+    ViewBag.Title = "Message Viewer";
+}
+
+@*<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Solr-Actual</title>
+    <link rel="stylesheet" media="screen"/>
+</head>
+
+<body>*@
+
+@using (Html.BeginForm("Login", "Home"))
+{
+    
+    <div class="prijavno-okno">
+        <img src="/Content/images/logo123.png" class="slikaLogo" />
+        <fieldset>
+            <legend>Login</legend>
+            <form method="get">
+                <label>Username:</label>
+                @Html.TextBoxFor(u => u.Username)
+                @Html.ValidationMessageFor(u => u.Username)
+                <br/> 
+                <label>Password:</label>
+                @Html.PasswordFor(p => p.Password)
+                @Html.ValidationMessageFor(u => u.Password)
+                <br/>
+                <input class="gumb" type="submit" value="Login">
+            </form>
+        </fieldset>
+        @Html.ValidationSummary(false)
+    </div>  
+}
+@*</body>
+
+</html>*@
+

@@ -1,0 +1,46 @@
+﻿@model AdminRole.Models.KraticeTable
+@{
+    ViewBag.Title = "Message Viewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="prijavno-okno_delete2">
+        <h3 class="deleteMessage">Are you sure you whant to delete this message type?</h3>
+        <fieldset>
+            <legend>Destination Type to delete</legend>
+            <label>ID</label>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Id_K, new {disabled = "disabled", @readonly = "readonly"})
+            </div>
+            <label>Message Type</label>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Kratica, new {disabled = "disabled", @readonly = "readonly"})
+            </div>
+            <label>Slo. description</label>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.OpisSlo, new {disabled = "disabled", @readonly = "readonly", style="width: 350px;"})
+            </div>
+            <label>Eng. description</label>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.OpisAng, new {disabled = "disabled", @readonly = "readonly", style="width: 350px;"})
+            </div>
+            <p>
+                <input class="gumb_delete" type="submit" value="Delete Message Type"/>
+                <input class="gumb_back_to-edit2" type="button" value="Back to Customers" onclick="RedirectToDelete()"/>
+            </p>
+        </fieldset>
+        
+    </div>
+}
+
+<div>   
+    <script type="text/javascript">
+        function RedirectToDelete() {
+            var url = "@Url.Action("KraticeView")";
+            location.href = url;
+        }
+    </script>
+</div>

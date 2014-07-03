@@ -1,0 +1,47 @@
+﻿@model AdminRole.Models.KraticeTable
+@{
+    ViewBag.Title = "Message Viewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="prijavno-okno_create-customer">
+        <fieldset>
+            <legend>Create New Message Type</legend>
+            
+            <label>Message Type:</label>
+            <div class="editor-label">
+                @Html.TextBoxFor(u => u.Kratica )
+                @Html.ValidationMessageFor(u => u.Kratica)
+            </div>
+            
+            <label>Slo. description:</label>
+            <div class="editor-label">
+                @Html.TextBoxFor(u => u.OpisSlo, new {@style = "width: 350px;"} )
+            </div>
+            
+            <label>Eng. description:</label>
+            <div class="editor-label">
+                @Html.TextBoxFor(u => u.OpisAng, new {@style = "width: 350px;"} )
+            </div>
+
+            <input class="gumb_create-customer" type="submit" value="Create New Message Type"/>
+            @Html.HiddenFor(model => model.Id_K)
+            <div>   
+                <input class="gumb_back_to-edit2" type="button" value="Back To Create Menu" onclick="Redirect()"/>
+                <script type="text/javascript">
+                    function Redirect() {
+                            var url = "@Url.Action("KraticeView")";
+                            location.href = url;
+                        }
+                </script>
+            </div> 
+        </fieldset>
+       @Html.ValidationSummary(false)
+    </div>
+    
+}
+

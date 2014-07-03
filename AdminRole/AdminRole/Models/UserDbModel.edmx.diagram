@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="669c66aa9426440289d85dc011c01609" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="userDbModel.UsersTable" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="userDbModel.CustomerTable" Width="1.5" PointX="4.125" PointY="1.125" />
+        <EntityTypeShape EntityType="userDbModel.CustomType" Width="1.5" PointX="7.625" PointY="1.375" />
+        <AssociationConnector Association="userDbModel.FK_CustomerTable_UsersTable" />
+        <AssociationConnector Association="userDbModel.FK_CustomerTable_UsersTable1" />
+        <EntityTypeShape EntityType="userDbModel.KraticeTable" Width="1.5" PointX="0.75" PointY="4.125" />
+        <EntityTypeShape EntityType="userDbModel.VlogaUporabnika" Width="1.5" PointX="9.875" PointY="1.375" />
+        <AssociationConnector Association="userDbModel.FK_UsersTable_VlogaUporabnika" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

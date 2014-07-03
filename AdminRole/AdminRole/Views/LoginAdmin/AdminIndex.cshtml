@@ -1,0 +1,222 @@
+﻿@model AdminRole.Models.SpremenljivkeView
+
+@using System.Activities.Expressions
+@using System.Activities.Statements
+@using System.Data.Common.CommandTrees.ExpressionBuilder
+@using System.Security.AccessControl
+@using System.Web.Razor.Parser.SyntaxTree
+@using System.Web.Services.Discovery
+@using System.Web.UI.WebControls
+@using Microsoft.Ajax.Utilities
+@using AdminRole.Models
+@using AdminRole.Helpers
+@using System.Security.Policy
+@using System.Web.Mvc.Html
+
+@{
+    ViewBag.Title = "Message Viewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        $('.datepicker').datetimepicker({
+            showAnim: 'slideDown',
+            dateFormat: 'yy-mm-dd'
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $(document).on('click', '.message-data', function (e) {
+            e.preventDefault();
+            jQuery.modal($(this).next().html());
+        });
+    });
+
+</script>
+
+<div class="center-table">
+        <div class="center-vrstice">
+        <form method="get" action="@Url.Action("AdminIndex")">
+        <div class="vrstica">
+            <label>Customer:</label>
+            <div class="editor-field">
+                @*@Html.TextBox("destination", Model.Search.Destination)*@
+                @Html.DropDownList("destination", ((SelectList) ViewBag.DropList).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = ( t.Text == ViewBag.Destination)}), "-- Select All --", Model.Search.Destination)
+            </div> 
+        </div>
+        <div class="vrstica">
+            <label>Order:</label>
+            <div class="editor-field">
+                @Html.TextBox("order", Model.Search.Order)
+            </div> 
+        </div>
+        <div class="vrstica">
+            <label>Internal:</label>
+            <div class="editor-field">
+                @Html.TextBox("internal", Model.Search.Internal)
+            </div> 
+        </div>
+        <div class="vrstica">
+            <label>Date From:</label>
+            <div class="editor-field">
+                @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker" })
+            
+            </div>
+        </div>
+            <div class="vrstica">
+                <label>Date To:</label>
+                <div class="editor-field">
+                    @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker" })
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <div class="vrstica">
+                <label>Sequentialid:</label>
+                <div class="editor-field">
+                    @Html.TextBox("sequentialid", Model.Search.Sequ)
+                </div>
+            </div>
+            <div class="vrstica">
+                <label>Agent:</label>
+                <div class="editor-field">
+                    @Html.TextBox("agent", Model.Search.Agent)
+                </div>
+            </div>
+            <div class="vrstica">
+                <label>Voyage:</label>
+                <div class="editor-field">
+                    @Html.TextBox("voyage", Model.Search.Voyage)
+                </div>
+            </div>
+            <div class="vrstica">
+                <label>Vessel:</label>
+                <div class="editor-field">
+                    @Html.TextBox("vessel", Model.Search.Vessel)
+                </div>
+            </div>
+            <div class="vrstica">
+                <label>Msg. state:</label>
+                <div class="editor-field">
+                    @Html.TextBox("msg_state", Model.Search.MsgS)
+                </div>
+            </div>
+            <div class="vrstica">
+                <input class="first-search_btn" type="submit" value="Search"/> 
+            </div>
+        </form>    
+        </div>
+    
+        <div class="crta1"><hr/></div>
+
+        @* Tabela *@
+
+        <div class="tabelaSolr">
+            <table class="dani-tabela2">
+                <tr class="naslovi">
+                    <th>Internal</th>
+                    <th>Seq. ID</th>
+                    <th>Extid</th>
+                    <th>Msg. Type</th> 
+                    <th>Sender</th>
+                    <th>Dest</th>
+                    <th>Order</th>
+                    <th>Agent</th>
+                    <th>Vessel</th> 
+                    <th>Voyage</th>
+                    <th>Exchangetimestamp</th> 
+                    <th>Msg State</th> 
+                    <th>Details</th>
+                </tr> 
+                @foreach (var row in Model.Spremenljivke)
+                {
+                    <tr align="center" class="@((row.ExStat == 1) ? "error" : "")">
+                        <td>@row.Internal.First()</td>
+                        <td>@row.Sequ</td>
+                        <td>@row.ExtId</td>
+                        <td>@row.MsgT.First()</td>
+                        <td>@row.Sender.First()</td>
+                        <td>@row.Destination.First()</td>
+                        <td>@row.Order.First()</td>
+                        <td>@row.Agent.First()</td>
+                        <td>@row.Vessel.First()</td>
+                        <td>@row.Voyage.First()</td>
+                        <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
+                        <td>@row.MsgS</td>
+                        <td>
+                            <a href class="message-data">View</a>
+                            <div style="display: none">
+                                <div style="display: block">
+                                    <h3>Detail View of Data</h3>
+                                
+                                    <p class="pscript">
+                                        Internal: <b>@Html.Raw(row.Internal.First())</b>
+                                    </p>
+
+                                    <p class="pscript">
+                                        Sequential Id: <b>@Html.Raw(row.Sequ)</b>, Mesage Type: <b>@Html.Raw(row.MsgT.First())</b>
+                                    </p>
+                                
+                                    <p class="pscript">
+                                        Sender: <b>@Html.Raw(row.Sender.First())</b>, Agent: <b>@Html.Raw(row.Agent.First())</b>, Destination: <b>@Html.Raw(row.Destination.First())</b> with Order: <b>@Html.Raw(row.Order.First())</b>
+                                    </p>
+                                
+                                    <p class="pscript">
+                                        Date: <b>@Html.Raw(row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset))</b>
+                                    </p>
+                                    
+                                    <p class="pscript">
+                                        Status: <b>@Html.Raw(row.MsgS)</b>
+                                    </p>
+
+                                    <p class="pscript">
+                                        Data information of message.
+                                    </p>
+                                    <div>
+                                        <code><pre>@Html.Raw(Html.Encode(row.Data))</pre></code>
+                                    </div>
+                                </div>
+
+                            </div>
+                        
+                        </td>
+                 
+                    </tr>
+                } 
+            </table> 
+
+        </div>
+
+        <div class="resultPosition">
+        @{ Html.RenderPartial("Pagination", new PaginationInfo
+           {
+               PageUrl = Url.SetParameter("page", "!0"),
+               CurrentPage = Model.Search.PageIndex,
+               PageSize = Model.Search.PageSize,
+               TotalItemCount = Model.TotalCount,
+           }); }  
+        </div>
+        
+        <div class="pagesize">
+            Items per page:@{ var arr = new[] { 5, 10, 15, 20 };}
+            @for (var i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] == Model.Search.PageSize)
+                {
+                    <span>@arr[i]</span> 
+                }
+                else
+                {
+                    <a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@arr[i]</a>
+                }
+                @Html.Raw((i == (arr.Length - 1) ? "" : "|")) 
+            }
+        </div>  
+    </div>
