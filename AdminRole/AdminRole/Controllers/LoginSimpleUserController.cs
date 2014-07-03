@@ -217,6 +217,8 @@ namespace AdminRole.Controllers
 
                         //}
 
+                        //Logika sortiranja
+
                         var grupe = matchingSpremenljivke.GroupBy(s => s.Version);
                         foreach (IGrouping<long, SpremenljivkeSolr> grupa in grupe)
                         {
