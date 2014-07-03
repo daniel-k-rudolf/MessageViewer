@@ -225,7 +225,7 @@ namespace AdminRole.Controllers
                             List<SpremenljivkeSolr> tmpList = new List<SpremenljivkeSolr>();
                             foreach (SpremenljivkeSolr tmpSolr in grupa)
                             {
-                                tmpList.Add(tmpSolr);
+                                tmpList.Add(tmpSolr); 
                             }
                         }
 
