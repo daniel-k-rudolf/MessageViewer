@@ -206,17 +206,14 @@ namespace AdminRole.Controllers
 
                     if (matchingSpremenljivke != null && matchingSpremenljivke.Count > 0)
                     {
-                        string destination = null;
+                        List<string> destinacije = new List<string>();
+
                         matchingSpremenljivke.ForEach(m =>
                         {
-                            string data = m.Data;
-
-                            var splits = data.Split('#');
-
-                            destination = splits[7];
+                            destinacije.Add(m.Data.Split('#')[7]);
                         });
 
-                        if (destination == parameters.Destination)
+                        if (destinacije[0] == parameters.Destination)
                         {
                             if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") ||
                                 matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))

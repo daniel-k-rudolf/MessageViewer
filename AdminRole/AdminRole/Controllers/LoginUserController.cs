@@ -78,7 +78,6 @@ namespace AdminRole.Controllers
                             {
                                 new SolrQueryInList("destination", parameters.Destination), 
                                 new SolrQueryInList("sender", parameters.Destination),
-                                
                             },
                             "OR");
                 }

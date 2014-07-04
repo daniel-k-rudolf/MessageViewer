@@ -108,6 +108,7 @@
                                     <th>Destination</th>
                                     <th>Order</th>
                                     <th>Exchange Time Stamp</th>  
+                                    <th>Version</th>  
                                     <th>Details</th>
                                 </tr>
                                     
@@ -120,6 +121,7 @@
                                             <td>@row.Destination.First()</td>
                                             <td>@row.Order.First()</td>
                                             <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
+                                            <td>@row.Version</td>
                                             <td>
                                                 <a href class="message-data">View</a>
                                                 <div style="display: none">
