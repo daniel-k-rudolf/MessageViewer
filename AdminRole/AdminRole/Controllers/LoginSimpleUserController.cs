@@ -216,24 +216,21 @@ namespace AdminRole.Controllers
                         //    }
 
                         //}
-
                         
 
-                        var grupe = matchingSpremenljivke.GroupBy(s => s.Version);
-                        foreach (IGrouping<long, SpremenljivkeSolr> grupa in grupe)
-                        {
-                            List<SpremenljivkeSolr> tmpList = new List<SpremenljivkeSolr>();
-                            foreach (SpremenljivkeSolr tmpSolr in grupa)
-                            {
-                                tmpList.Add(tmpSolr); 
-                            }
-                        }
+                        //var grupe = matchingSpremenljivke.GroupBy(s => s.Version);
+                        //foreach (IGrouping<long, SpremenljivkeSolr> grupa in grupe)
+                        //{
+                        //    List<SpremenljivkeSolr> tmpList = new List<SpremenljivkeSolr>();
+                        //    foreach (SpremenljivkeSolr tmpSolr in grupa)
+                        //    {
+                        //        tmpList.Add(tmpSolr); 
+                        //    }
+                        //}
 
                         if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") || 
                             matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
-                        {
-
-                            
+                        {                       
 
                             SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
 
