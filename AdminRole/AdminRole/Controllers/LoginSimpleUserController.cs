@@ -206,20 +206,34 @@ namespace AdminRole.Controllers
 
                     if (matchingSpremenljivke != null && matchingSpremenljivke.Count > 0)
                     {
-
+                        string destination = null;
                         matchingSpremenljivke.ForEach(m =>
                         {
                             string data = m.Data;
 
                             var splits = data.Split('#');
 
-                            string destination = splits[7];
-
-                            if (destination == parameters.Destination)
-                            {
-                                
-                            }
+                            destination = splits[7];
                         });
+
+                        if (destination == parameters.Destination)
+                        {
+                            if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") ||
+                                matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
+                            {
+
+                                SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
+
+                                spremenljivkeSolr.Internal = matchingSpremenljivke[0].Internal;
+                                spremenljivkeSolr.Exchangetimestamp = matchingSpremenljivke[0].Exchangetimestamp;
+                                spremenljivkeSolr.Order = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Order;
+                                spremenljivkeSolr.Exchangetimestamp2 = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Exchangetimestamp;
+                                spremenljivkeSolr.MsgT = matchingSpremenljivke[matchingSpremenljivke.Count - 1].MsgT;
+                                spremenljivkeSolr.Sender = matchingSpremenljivke[0].Sender;
+
+                                seznam.Add(spremenljivkeSolr);
+                            }
+                        }
 
                         //foreach (var variable in matchingSpremenljivke)
                         //{
@@ -241,21 +255,21 @@ namespace AdminRole.Controllers
                         //    }
                         //}
 
-                        if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") || 
-                            matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
-                        {                       
+                        //if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") ||
+                        //    matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
+                        //{
 
-                            SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
+                        //    SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
 
-                            spremenljivkeSolr.Internal = matchingSpremenljivke[0].Internal;
-                            spremenljivkeSolr.Exchangetimestamp = matchingSpremenljivke[0].Exchangetimestamp;
-                            spremenljivkeSolr.Order = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Order;
-                            spremenljivkeSolr.Exchangetimestamp2 = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Exchangetimestamp;
-                            spremenljivkeSolr.MsgT = matchingSpremenljivke[matchingSpremenljivke.Count - 1].MsgT;
-                            spremenljivkeSolr.Sender = matchingSpremenljivke[0].Sender;
+                        //    spremenljivkeSolr.Internal = matchingSpremenljivke[0].Internal;
+                        //    spremenljivkeSolr.Exchangetimestamp = matchingSpremenljivke[0].Exchangetimestamp;
+                        //    spremenljivkeSolr.Order = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Order;
+                        //    spremenljivkeSolr.Exchangetimestamp2 = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Exchangetimestamp;
+                        //    spremenljivkeSolr.MsgT = matchingSpremenljivke[matchingSpremenljivke.Count - 1].MsgT;
+                        //    spremenljivkeSolr.Sender = matchingSpremenljivke[0].Sender;
 
-                            seznam.Add(spremenljivkeSolr);
-                        }
+                        //    seznam.Add(spremenljivkeSolr);
+                        //}
                     }
 
                     #endregion
