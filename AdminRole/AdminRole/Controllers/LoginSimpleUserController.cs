@@ -67,7 +67,7 @@ namespace AdminRole.Controllers
                             {
                                 new SolrQueryInList("destination", parameters.Destination), 
                                 new SolrQueryInList("sender", parameters.Destination),
-                                new SolrQueryInList("sender", "LUKA")
+                                new SolrQueryInList("sender", "LUKA"),
                             },
                             "OR");
                 }
@@ -207,6 +207,20 @@ namespace AdminRole.Controllers
                     if (matchingSpremenljivke != null && matchingSpremenljivke.Count > 0)
                     {
 
+                        matchingSpremenljivke.ForEach(m =>
+                        {
+                            string data = m.Data;
+
+                            var splits = data.Split('#');
+
+                            string destination = splits[7];
+
+                            if (destination == parameters.Destination)
+                            {
+                                
+                            }
+                        });
+
                         //foreach (var variable in matchingSpremenljivke)
                         //{
                         //    if (variable.MsgT.Contains("DISP.NP") ||
@@ -217,7 +231,6 @@ namespace AdminRole.Controllers
 
                         //}
                         
-
                         //var grupe = matchingSpremenljivke.GroupBy(s => s.Version);
                         //foreach (IGrouping<long, SpremenljivkeSolr> grupa in grupe)
                         //{
