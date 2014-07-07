@@ -219,16 +219,29 @@ namespace AdminRole.Controllers
                                 matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
                             {
 
+                                var grupe = matchingSpremenljivke.GroupBy(s => s.Breadcrumbid);
+                                foreach (IGrouping<string, SpremenljivkeSolr> grupa in grupe)
+                                {
+                                    List<SpremenljivkeSolr> tmpList = new List<SpremenljivkeSolr>();
+                                    foreach (SpremenljivkeSolr tmpSolr in grupa)
+                                    {
+                                        tmpList.Add(tmpSolr);
+                                    }
+                                
+                                #region PodatkiZaPrikaz
                                 SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
 
-                                spremenljivkeSolr.Internal = matchingSpremenljivke[0].Internal;
-                                spremenljivkeSolr.Exchangetimestamp = matchingSpremenljivke[0].Exchangetimestamp;
-                                spremenljivkeSolr.Order = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Order;
-                                spremenljivkeSolr.Exchangetimestamp2 = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Exchangetimestamp;
-                                spremenljivkeSolr.MsgT = matchingSpremenljivke[matchingSpremenljivke.Count - 1].MsgT;
-                                spremenljivkeSolr.Sender = matchingSpremenljivke[0].Sender;
+                                spremenljivkeSolr.Internal = tmpList[0].Internal;
+                                spremenljivkeSolr.Exchangetimestamp = tmpList[0].Exchangetimestamp;
+                                spremenljivkeSolr.Order = tmpList[tmpList.Count - 1].Order;
+                                spremenljivkeSolr.Exchangetimestamp2 = tmpList[tmpList.Count - 1].Exchangetimestamp;
+                                spremenljivkeSolr.MsgT = tmpList[tmpList.Count - 1].MsgT;
+                                spremenljivkeSolr.Sender = tmpList[0].Sender;
 
                                 seznam.Add(spremenljivkeSolr);
+                            #endregion
+
+                                }
                             }
                         }
 
@@ -252,27 +265,13 @@ namespace AdminRole.Controllers
                         //    }
                         //}
 
-                        //if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") ||
-                        //    matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
-                        //{
-
-                        //    SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
-
-                        //    spremenljivkeSolr.Internal = matchingSpremenljivke[0].Internal;
-                        //    spremenljivkeSolr.Exchangetimestamp = matchingSpremenljivke[0].Exchangetimestamp;
-                        //    spremenljivkeSolr.Order = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Order;
-                        //    spremenljivkeSolr.Exchangetimestamp2 = matchingSpremenljivke[matchingSpremenljivke.Count - 1].Exchangetimestamp;
-                        //    spremenljivkeSolr.MsgT = matchingSpremenljivke[matchingSpremenljivke.Count - 1].MsgT;
-                        //    spremenljivkeSolr.Sender = matchingSpremenljivke[0].Sender;
-
-                        //    seznam.Add(spremenljivkeSolr);
-                        //}
                     }
 
                     #endregion
 
                     view = new SpremenljivkeView
                     {
+
                         Spremenljivke = seznam,
                         Search = parameters,
                         TimeZone = timeZone,
