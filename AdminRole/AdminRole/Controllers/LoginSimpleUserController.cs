@@ -219,29 +219,91 @@ namespace AdminRole.Controllers
                                 matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
                             {
 
-                                var grupe = matchingSpremenljivke.GroupBy(s => s.Breadcrumbid);
-                                foreach (IGrouping<string, SpremenljivkeSolr> grupa in grupe)
+                                //Tmp spremenljivke
+                                int stevecDisp = 1;
+                                int stevecOdis = 1;
+
+                                Dictionary<int, List<SpremenljivkeSolr>> slovarSolr = new Dictionary<int, List<SpremenljivkeSolr>>();
+
+                                matchingSpremenljivke.ForEach(s => {
+                                        if (s.MsgT.Contains("DISP.NP") ||
+                                            s.MsgT.Contains("DISP.ND") ||
+                                            s.MsgT.Contains("DISP.LP"))
+                                        {
+                                            if (slovarSolr.ContainsKey(stevecDisp))
+                                            {
+                                                var values = slovarSolr[stevecDisp];
+                                                if (values != null)
+                                                {
+                                                    slovarSolr[stevecDisp].Add(s);
+                                                }
+                                                else
+                                                {
+                                                    List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                    list.Add(s);
+                                                    slovarSolr.Add(stevecDisp, list);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                list.Add(s);
+                                                slovarSolr.Add(stevecDisp, list);
+                                            }
+
+                                            stevecDisp++;
+                                        }
+
+                                        if (s.MsgT.Contains("ODIS.LE") ||
+                                            s.MsgT.Contains("ODIS.LF"))
+                                        {
+                                            if (slovarSolr.ContainsKey(stevecOdis))
+                                            {
+                                                var values = slovarSolr[stevecOdis];
+                                                if (values != null)
+                                                {
+                                                    slovarSolr[stevecOdis].Add(s);
+                                                }
+                                                else
+                                                {
+                                                    List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                    list.Add(s);
+                                                    slovarSolr.Add(stevecOdis, list);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                list.Add(s);
+                                                slovarSolr.Add(stevecOdis, list);
+                                            }
+
+                                            stevecOdis++;
+                                        }
+                                });
+
+                                if (slovarSolr.Keys.Count > 0)
                                 {
-                                    List<SpremenljivkeSolr> tmpList = new List<SpremenljivkeSolr>();
-                                    foreach (SpremenljivkeSolr tmpSolr in grupa)
+                                    foreach (int key in slovarSolr.Keys)
                                     {
-                                        tmpList.Add(tmpSolr);
-                                    }
-                                
-                                #region PodatkiZaPrikaz
-                                SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
+                                        var seznamSolrSpre = slovarSolr[key];
 
-                                spremenljivkeSolr.Internal = tmpList[0].Internal;
-                                spremenljivkeSolr.Exchangetimestamp = tmpList[0].Exchangetimestamp;
-                                spremenljivkeSolr.Order = tmpList[tmpList.Count - 1].Order;
-                                spremenljivkeSolr.Exchangetimestamp2 = tmpList[tmpList.Count - 1].Exchangetimestamp;
-                                spremenljivkeSolr.MsgT = tmpList[tmpList.Count - 1].MsgT;
-                                spremenljivkeSolr.Sender = tmpList[0].Sender;
+                                        #region PodatkiZaPrikaz
+                                        SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
 
-                                seznam.Add(spremenljivkeSolr);
-                            #endregion
+                                        spremenljivkeSolr.Internal = seznamSolrSpre[0].Internal;
+                                        spremenljivkeSolr.Exchangetimestamp = seznamSolrSpre[0].Exchangetimestamp;
+                                        spremenljivkeSolr.Order = seznamSolrSpre[seznamSolrSpre.Count - 1].Order;
+                                        spremenljivkeSolr.Exchangetimestamp2 = seznamSolrSpre[seznamSolrSpre.Count - 1].Exchangetimestamp;
+                                        spremenljivkeSolr.MsgT = seznamSolrSpre[seznamSolrSpre.Count - 1].MsgT;
+                                        spremenljivkeSolr.Sender = seznamSolrSpre[0].Sender;
 
+                                        seznam.Add(spremenljivkeSolr);
+                                        #endregion
+                                    }   
                                 }
+                                
+                                
                             }
                         }
 
