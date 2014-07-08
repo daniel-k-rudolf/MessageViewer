@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -210,25 +211,38 @@ namespace AdminRole.Controllers
 
                         matchingSpremenljivke.ForEach(m =>
                         {
-                            destinacije.Add(m.Data.Split('#')[7]);
-                        });
-
+                            if (m.MsgT.Contains("DISP.NP") ||
+                                m.MsgT.Contains("DISP.ND") || 
+                                m.MsgT.Contains("DISP.LP"))
+                            {
+                                destinacije.Add(m.Data.Split('#')[7]);      
+                            }
+                            else if (m.MsgT.Contains("ODIS.LF") || 
+                                     m.MsgT.Contains("ODIS.LE") ||
+                                     m.MsgT.Contains("ODIS.LD"))
+                            {
+                                destinacije.Add(m.Data.Split(' ', '\t')[54]);
+                            }
+                        }); 
+ 
                         if (destinacije[0] == parameters.Destination)
                         {
                             if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") ||
                                 matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
                             {
-
+                                #region LogikaRazvrscanja
                                 //Tmp spremenljivke
                                 int stevecDisp = 1;
+                                int stevecDispLP = 1;
                                 int stevecOdis = 1;
 
                                 Dictionary<int, List<SpremenljivkeSolr>> slovarSolr = new Dictionary<int, List<SpremenljivkeSolr>>();
 
-                                matchingSpremenljivke.ForEach(s => {
+                                matchingSpremenljivke.ForEach(s =>
+                                 {
+                                      #region 1) DISP.NP/ND
                                         if (s.MsgT.Contains("DISP.NP") ||
-                                            s.MsgT.Contains("DISP.ND") ||
-                                            s.MsgT.Contains("DISP.LP"))
+                                            s.MsgT.Contains("DISP.ND"))
                                         {
                                             if (slovarSolr.ContainsKey(stevecDisp))
                                             {
@@ -253,9 +267,43 @@ namespace AdminRole.Controllers
 
                                             stevecDisp++;
                                         }
+                                     #endregion
+
+                                      #region 2) DISP.LP
+                                        if (s.MsgT.Contains("DISP.LP"))
+                                        {
+                                            if (slovarSolr.ContainsKey(stevecDispLP))
+                                            {
+                                                var values = slovarSolr[stevecDispLP];
+                                                if (values != null)
+                                                {
+                                                    slovarSolr[stevecDispLP].Add(s);
+                                                }
+                                                else
+                                                {
+                                                    List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                    list.Add(s);
+                                                    slovarSolr.Add(stevecDispLP, list);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                list.Add(s);
+                                                slovarSolr.Add(stevecDispLP, list);
+                                            }
+
+                                            stevecDispLP++;
+                                        }
+                                      #endregion
+
+                                      #region 3) ODIS.LE/LF/LP/LD/LZ
 
                                         if (s.MsgT.Contains("ODIS.LE") ||
-                                            s.MsgT.Contains("ODIS.LF"))
+                                            s.MsgT.Contains("ODIS.LF") ||
+                                            s.MsgT.Contains("ODIS.LP") ||
+                                            s.MsgT.Contains("ODIS.LD") ||
+                                            s.MsgT.Contains("ODIS.LZ"))
                                         {
                                             if (slovarSolr.ContainsKey(stevecOdis))
                                             {
@@ -280,7 +328,9 @@ namespace AdminRole.Controllers
 
                                             stevecOdis++;
                                         }
-                                });
+                                        #endregion
+
+                                 });
 
                                 if (slovarSolr.Keys.Count > 0)
                                 {
@@ -300,11 +350,11 @@ namespace AdminRole.Controllers
 
                                         seznam.Add(spremenljivkeSolr);
                                         #endregion
-                                    }   
+                                    }
                                 }
-                                
-                                
+                                #endregion
                             }
+
                         }
 
                         //foreach (var variable in matchingSpremenljivke)
