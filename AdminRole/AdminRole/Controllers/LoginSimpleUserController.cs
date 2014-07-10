@@ -199,8 +199,17 @@ namespace AdminRole.Controllers
                         Rows = parameters.PageSize,
                         Start = start,
                         OrderBy = order.Concat(GetSelectedSort(parameters)).ToList(),
-                    });
-
+                        Grouping = new GroupingParameters()
+                        {
+                            Fields = new[] { "sequentialid" },
+                            Format = GroupingFormat.Grouped,
+                            Limit = 100,
+                        }
+                    }).Grouping["sequentialid"]
+                                        .Groups.GroupBy(r => r.Documents)
+                                        .Select(r => r.Key)
+                                        .Select(r => r.FirstOrDefault()).ToList();
+                    
                     #region Internal process
                     
                     var seznam = new List<SpremenljivkeSolr>();
