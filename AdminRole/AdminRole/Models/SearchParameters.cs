@@ -8,7 +8,7 @@ namespace AdminRole.Models
 {
     public class SearchParameters
     {
-        public const int DefaultPageSize = 15;
+        public const int DefaultPageSize = 30;
 
         public SearchParameters()
         {
