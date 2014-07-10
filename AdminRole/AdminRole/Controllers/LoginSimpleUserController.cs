@@ -228,7 +228,8 @@ namespace AdminRole.Controllers
                             }
                             else if (m.MsgT.Contains("ODIS.LF") || 
                                      m.MsgT.Contains("ODIS.LE") ||
-                                     m.MsgT.Contains("ODIS.LD"))
+                                     m.MsgT.Contains("ODIS.LD") ||
+                                     m.MsgT.Contains("ODIS.LV"))
                             {
                                 destinacije.Add(m.Data.Split(' ', '\t')[54]);
                             }
@@ -236,14 +237,26 @@ namespace AdminRole.Controllers
  
                         if (destinacije[0] == parameters.Destination)
                         {
+
+                            //int prviRez = 0;
+                            //if (matchingSpremenljivke[0].Sequ == 0) { prviRez = 1; }
+                            //else { prviRez = 0; }
+
+                            matchingSpremenljivke.ForEach(m =>
+                            {
+                                if (m.Sequ == 0)
+                                {
+                                    matchingSpremenljivke.Remove(m);
+                                }
+                            });
+
                             if (matchingSpremenljivke[0].MsgT.Contains("DISP.NP") ||
                                 matchingSpremenljivke[0].MsgT.Contains("DISP.ND"))
                             {
                                 #region LogikaRazvrscanja
                                 //Tmp spremenljivke
                                 int stevecDisp = 1;
-                                int stevecDispLP = 1;
-                                int stevecOdis = 1;
+                                int stevecOdis = 0;
 
                                 Dictionary<int, List<SpremenljivkeSolr>> slovarSolr = new Dictionary<int, List<SpremenljivkeSolr>>();
 
@@ -275,44 +288,18 @@ namespace AdminRole.Controllers
                                             }
 
                                             stevecDisp++;
+                                            stevecOdis++;
                                         }
                                      #endregion
 
-                                      #region 2) DISP.LP
-                                        if (s.MsgT.Contains("DISP.LP"))
-                                        {
-                                            if (slovarSolr.ContainsKey(stevecDispLP))
-                                            {
-                                                var values = slovarSolr[stevecDispLP];
-                                                if (values != null)
-                                                {
-                                                    slovarSolr[stevecDispLP].Add(s);
-                                                }
-                                                else
-                                                {
-                                                    List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
-                                                    list.Add(s);
-                                                    slovarSolr.Add(stevecDispLP, list);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
-                                                list.Add(s);
-                                                slovarSolr.Add(stevecDispLP, list);
-                                            }
-
-                                            stevecDispLP++;
-                                        }
-                                      #endregion
-
-                                      #region 3) ODIS.LE/LF/LP/LD/LZ
+                                      #region 2) ODIS.LE/LF/LP/LD/LZ
 
                                         if (s.MsgT.Contains("ODIS.LE") ||
                                             s.MsgT.Contains("ODIS.LF") ||
                                             s.MsgT.Contains("ODIS.LP") ||
                                             s.MsgT.Contains("ODIS.LD") ||
-                                            s.MsgT.Contains("ODIS.LZ"))
+                                            s.MsgT.Contains("ODIS.LZ") ||
+                                            s.MsgT.Contains("DISP.LP")) 
                                         {
                                             if (slovarSolr.ContainsKey(stevecOdis))
                                             {
@@ -334,8 +321,6 @@ namespace AdminRole.Controllers
                                                 list.Add(s);
                                                 slovarSolr.Add(stevecOdis, list);
                                             }
-
-                                            stevecOdis++;
                                         }
                                         #endregion
 
@@ -366,6 +351,7 @@ namespace AdminRole.Controllers
 
                         }
 
+                        #region ZaPregled
                         //foreach (var variable in matchingSpremenljivke)
                         //{
                         //    if (variable.MsgT.Contains("DISP.NP") ||
@@ -385,16 +371,17 @@ namespace AdminRole.Controllers
                         //        tmpList.Add(tmpSolr); 
                         //    }
                         //}
-
+                        #endregion
+                        
                     }
 
                     #endregion
 
                     view = new SpremenljivkeView
                     {
-
                         Spremenljivke = seznam,
                         Search = parameters,
+                        TotalCount = seznam.Count,
                         TimeZone = timeZone,
                     };
                 }

@@ -243,12 +243,12 @@
                             <table class="dani-tabela3" cellspacing="0px">
                                 <tr class="naslovi">
                                     <th>Dogodek</th>
-                                    <th>Interna št.</th>
-                                    <th>Datum prejema</th>
+                                    <th>Interna številka</th>
+                                    <th>Poslano</th>
                                     <th>Pošiljatelj</th>
-                                    <th>Luška št.</th>
+                                    <th>Luška številka</th>
                                     <th>Stanje sporočila</th>
-                                    <th>Datum zaključka</th>
+                                    <th>Prejeto</th>
                                 </tr>
                                 @if (Model.Spremenljivke != null)
                                 {
@@ -257,17 +257,43 @@
                                     {
                                         <tr align="center">
                                             <td><strong>[@(dogodek++)]</strong></td>
-                                            <td>@row.Internal.Last()</td>
+                                            <td>@row.Internal.FirstOrDefault()</td>
                                             <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
-                                            <td>@row.Sender.Last()</td>
-                                            <td>@row.Order.Last()</td>
+                                            <td>@row.Sender.FirstOrDefault()</td>
+                                            <td>@row.Order.FirstOrDefault()</td>
                                             <td>@String.Join(",", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisSlo).FirstOrDefault() ?? row.MsgT.FirstOrDefault() )</td>
                                             <td>@row.Exchangetimestamp2.Add(Model.TimeZone.BaseUtcOffset)</td>
-                                       </tr>
+                                        </tr>
                                     }
                                 }
                             </table> 
                         </div>
+                            <div class="resultPosition">
+                              @{ Html.RenderPartial("Pagination", new PaginationInfo
+                               {
+                                   PageUrl = Url.SetParameter("page", "!0"),
+                                   CurrentPage = Model.Search.PageIndex,
+                                   PageSize = Model.Search.PageSize,
+                                   TotalItemCount = Model.TotalCount,
+                               }); }  
+                            </div>
+        
+                            <div class="pagesize">
+                                Items per page:@{ var arr = new[] { 10, 20, 30, 40, 50 };}
+                                @for (var i = 0; i < arr.Length; i++)
+                                {
+                                    if (arr[i] == Model.Search.PageSize)
+                                    {
+                                        <span>@arr[i]</span> 
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@arr[i]</a>
+                                    }
+                                    @Html.Raw((i == (arr.Length - 1) ? "" : "|")) 
+                                }
+                                
+                            </div> 
                     </div>
                 }
             }

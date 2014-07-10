@@ -350,6 +350,7 @@
     <Content Include="Views\LoginAdmin\CreateNewMessageType.cshtml" />
     <Content Include="Views\LoginAdmin\DeleteMessageType.cshtml" />
     <Content Include="Views\LoginAdmin\EditMessage.cshtml" />
+    <Content Include="Views\LoginSimpleUser\Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

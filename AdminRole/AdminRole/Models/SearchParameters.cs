@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http.Filters;
+using AdminRole.Controllers;
 
 namespace AdminRole.Models
 {
     public class SearchParameters
     {
-        public const int DefaultPageSize = 30;
+        public const int DefaultPageSize = 50;
 
         public SearchParameters()
         {

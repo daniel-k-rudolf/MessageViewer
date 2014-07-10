@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+
+@using AdminRole.Helpers
+@using AdminRole.Models
+@model AdminRole.Models.PaginationInfo
+
+<div>
+    <b>Results @Model.FirstItemIndex - @Model.LastItemIndex</b>
+</div>
+
+<div class="pagination">
+
+@if (Model.HasPrevPage)
+{
+    <a href="@Model.PrevPageUrl">&laquo; Previous</a>
+}
+else
+{
+    <span class="disabledPage">&laquo; Previous</span>
+}
+
+@foreach (var p in Model.Pages)
+{
+    if (p == Model.CurrentPage)
+    {
+        <span class="currentPage">@p</span>
+    }
+    else
+    {
+        <a href="@Model.PageUrlFor(p)">@p</a>
+    }
+}
+
+@if (Model.HasNextPage)
+{
+    <a href="@Model.NextPageUrl">Next &raquo;</a>
+}
+else
+{
+    <span class="disabledPage">Next &raquo;</span>
+}
+    
+</div>
