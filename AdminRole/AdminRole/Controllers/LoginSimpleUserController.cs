@@ -23,6 +23,7 @@ using SolrNet.Exceptions;
 using SolrNet.Impl.FieldSerializers;
 using System.Linq;
 using PagedList;
+using ListExtensions = WebGrease.Css.Extensions.ListExtensions;
 
 namespace AdminRole.Controllers
 {
@@ -77,18 +78,6 @@ namespace AdminRole.Controllers
                 //naredi listo (poizvedbo) po ostalih spremenlivkah in destination ali sender
                 var solrQueries = new List<ISolrQuery> { queryInList };
 
-                #region OstaleSpremenljivke
-
-                //if (!string.IsNullOrEmpty(parameters.Order))
-                //    solrQueries.Add(new SolrQueryByField("order", parameters.Order));
-                    
-
-                //if (parameters.Exchangetimestamp.HasValue && parameters.Exchangetimestamp2.HasValue)
-                //{
-                //    solrQueries.Add(new SolrQueryByRange<DateTime>("exchangetimestamp",
-                //        parameters.Exchangetimestamp.Value, parameters.Exchangetimestamp2.Value));
-                //}
-
                 #region IntrernalSearch
 
                 if (!string.IsNullOrEmpty(parameters.Internal))
@@ -122,8 +111,6 @@ namespace AdminRole.Controllers
                 }
 
                 #endregion
-
-                #endregion;
 
                 return new SolrMultipleCriteriaQuery(solrQueries, "AND");
             }
@@ -238,10 +225,6 @@ namespace AdminRole.Controllers
                         if (destinacije[0] == parameters.Destination)
                         {
 
-                            //int prviRez = 0;
-                            //if (matchingSpremenljivke[0].Sequ == 0) { prviRez = 1; }
-                            //else { prviRez = 0; }
-
                             matchingSpremenljivke.ForEach(m =>
                             {
                                 if (m.Sequ == 0)
@@ -262,7 +245,7 @@ namespace AdminRole.Controllers
 
                                 matchingSpremenljivke.ForEach(s =>
                                  {
-                                      #region 1) DISP.NP/ND
+                                     #region 1) DISP.NP/ND
                                         if (s.MsgT.Contains("DISP.NP") ||
                                             s.MsgT.Contains("DISP.ND"))
                                         {
@@ -292,36 +275,75 @@ namespace AdminRole.Controllers
                                         }
                                      #endregion
 
-                                      #region 2) ODIS.LE/LF/LP/LD/LZ
+                                     #region 2) ODIS.LE/LF/LP/LD/LZ
 
-                                        if (s.MsgT.Contains("ODIS.LE") ||
-                                            s.MsgT.Contains("ODIS.LF") ||
-                                            s.MsgT.Contains("ODIS.LP") ||
-                                            s.MsgT.Contains("ODIS.LD") ||
-                                            s.MsgT.Contains("ODIS.LZ") ||
-                                            s.MsgT.Contains("DISP.LP")) 
-                                        {
-                                            if (slovarSolr.ContainsKey(stevecOdis))
-                                            {
-                                                var values = slovarSolr[stevecOdis];
-                                                if (values != null)
-                                                {
-                                                    slovarSolr[stevecOdis].Add(s);
-                                                }
-                                                else
-                                                {
-                                                    List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
-                                                    list.Add(s);
-                                                    slovarSolr.Add(stevecOdis, list);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
-                                                list.Add(s);
-                                                slovarSolr.Add(stevecOdis, list);
-                                            }
-                                        }
+                                     using (var dbKratica = new userDbEntities())
+                                     {
+
+                                         var seznamKrat =
+                                             dbKratica.KraticeTables
+                                             .Where(a => (a.Kratica != "DISP.ND") && (a.Kratica != "DISP.NP"))
+                                             .Select(a => a.Kratica);
+
+                                         foreach (var test in seznamKrat)
+                                         {
+                                             if (s.MsgT.Contains(test))
+                                             {
+                                                 if (slovarSolr.ContainsKey(stevecOdis))
+                                                 {
+                                                     var values = slovarSolr[stevecOdis];
+                                                     if (values != null)
+                                                     {
+                                                         slovarSolr[stevecOdis].Add(s);
+                                                     }
+                                                     else
+                                                     {
+                                                         List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                         list.Add(s);
+                                                         slovarSolr.Add(stevecOdis, list);
+                                                     }
+                                                 }
+                                                 else
+                                                 {
+                                                     List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                                     list.Add(s);
+                                                     slovarSolr.Add(stevecOdis, list);
+                                                 }
+                                             }
+                                         }
+      
+                                     }
+
+                                    
+                                        //if (s.MsgT.Contains("ODIS.LE") ||
+                                        //    s.MsgT.Contains("ODIS.LF") ||
+                                        //    s.MsgT.Contains("ODIS.LP") ||
+                                        //    s.MsgT.Contains("ODIS.LD") ||
+                                        //    s.MsgT.Contains("ODIS.LZ") ||
+                                        //    s.MsgT.Contains("ODIS.LC") ||
+                                        //    s.MsgT.Contains("DISP.LP")) 
+                                        //{
+                                        //    if (slovarSolr.ContainsKey(stevecOdis))
+                                        //    {
+                                        //        var values = slovarSolr[stevecOdis];
+                                        //        if (values != null)
+                                        //        {
+                                        //            slovarSolr[stevecOdis].Add(s);
+                                        //        }
+                                        //        else
+                                        //        {
+                                        //            List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                        //            list.Add(s);
+                                        //            slovarSolr.Add(stevecOdis, list);
+                                        //        }
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
+                                        //        list.Add(s);
+                                        //        slovarSolr.Add(stevecOdis, list);
+                                        //    }
+                                        //}
                                         #endregion
 
                                  });
