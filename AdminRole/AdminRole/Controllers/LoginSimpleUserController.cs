@@ -207,19 +207,19 @@ namespace AdminRole.Controllers
 
                         matchingSpremenljivke.ForEach(m =>
                         {
-                            if (m.MsgT.Contains("DISP.NP") ||
-                                m.MsgT.Contains("DISP.ND") || 
-                                m.MsgT.Contains("DISP.LP"))
+
+                            //izloči ven kdo je pošiljatelj iz glave sporočila
+                            var tmp = m.Data.Split(' ', '\t')[0];
+
+                            if (tmp == parameters.Destination + "LUKA")
                             {
-                                destinacije.Add(m.Data.Split('#')[7]);      
+                                destinacije.Add(m.Data.Split('#')[7]);
                             }
-                            else if (m.MsgT.Contains("ODIS.LF") || 
-                                     m.MsgT.Contains("ODIS.LE") ||
-                                     m.MsgT.Contains("ODIS.LD") ||
-                                     m.MsgT.Contains("ODIS.LV"))
+                            else
                             {
                                 destinacije.Add(m.Data.Split(' ', '\t')[54]);
                             }
+
                         }); 
  
                         if (destinacije[0] == parameters.Destination)
@@ -314,36 +314,6 @@ namespace AdminRole.Controllers
       
                                      }
 
-                                    
-                                        //if (s.MsgT.Contains("ODIS.LE") ||
-                                        //    s.MsgT.Contains("ODIS.LF") ||
-                                        //    s.MsgT.Contains("ODIS.LP") ||
-                                        //    s.MsgT.Contains("ODIS.LD") ||
-                                        //    s.MsgT.Contains("ODIS.LZ") ||
-                                        //    s.MsgT.Contains("ODIS.LC") ||
-                                        //    s.MsgT.Contains("DISP.LP")) 
-                                        //{
-                                        //    if (slovarSolr.ContainsKey(stevecOdis))
-                                        //    {
-                                        //        var values = slovarSolr[stevecOdis];
-                                        //        if (values != null)
-                                        //        {
-                                        //            slovarSolr[stevecOdis].Add(s);
-                                        //        }
-                                        //        else
-                                        //        {
-                                        //            List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
-                                        //            list.Add(s);
-                                        //            slovarSolr.Add(stevecOdis, list);
-                                        //        }
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        List<SpremenljivkeSolr> list = new List<SpremenljivkeSolr>();
-                                        //        list.Add(s);
-                                        //        slovarSolr.Add(stevecOdis, list);
-                                        //    }
-                                        //}
                                         #endregion
 
                                  });
