@@ -21,27 +21,29 @@
 
 @{
 
-        <script type="text/javascript">
+    <script type="text/javascript">
 
-            $(function() {
-                $('.datepicker').datetimepicker({
-                    showAnim: 'slideDown',
-                    dateFormat: 'yy-mm-dd'
-                });
+        $(function() {
+            $('.datepicker').datetimepicker({
+                showAnim: 'slideDown',
+                dateFormat: 'yy-mm-dd'
             });
+        });
+       
+    </script>
+    
+    <script type="text/javascript">
 
-        </script>
-
-        <script type="text/javascript">
-
-            $(function() {
-                $(document).on('click', '.message-data', function(e) {
-                    e.preventDefault();
-                    jQuery.modal($(this).next().html());
-                });
+        $(function() {
+            $(document).on('click', '.message-data', function(e) {
+                e.preventDefault();
+                jQuery.modal($(this).next().html());
             });
+        });
 
-        </script>
+    </script>
+    
+    
     
     string userName = System.Web.HttpContext.Current.User.Identity.Name;
     using (var dbUs = new userDbEntities())
@@ -56,36 +58,40 @@
                 {
                     <div class="center-table">
                         <div class="center-vrstice">
-                                <div class="vrstica">
-                                    <label>Customer:</label>
-                                    <div class="editor-field">
-                                        @*@Html.TextBox("destination", Model.Search.Destination)*@
-                                        @Html.DropDownList("destination", ((SelectList)ViewBag.DropList).Select(t => new SelectListItem() { Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.Destination) }), "-- Select All --", Model.Search.Destination)
-                                    </div> 
+                            
+                            <div class="vrstica">
+                                <label>Customer:</label>
+                                <div class="editor-field">
+                                    @Html.DropDownList("destination", ((SelectList)ViewBag.DropList).Select(t => new SelectListItem() { Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.Destination) }), "-- Select All --", Model.Search.Destination)
                                 </div>
-                                <div class="vrstica">
-                                    <label>Order:</label>
-                                    <div class="editor-field">
-                                        @Html.TextBox("order", Model.Search.Order)
-                                    </div> 
-                                </div>
-                                <div class="vrstica">
-                                    <label>Internal:</label>
-                                    <div class="editor-field">
-                                        @Html.TextBox("internal", Model.Search.Internal)
-                                    </div> 
-                                </div>
-                                <div class="vrstica">
-                                    <label>Date From:</label>
-                                    <div class="editor-field">
-                                        @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker" })
+                            </div>
+                            
+                            <div class="vrstica">
+                                <label>Order:</label>
+                                <div class="editor-field">
+                                    @Html.TextBox("order", Model.Search.Order)
+                                </div> 
+                            </div>
+
+                            <div class="vrstica">
+                                <label>Internal:</label>
+                                <div class="editor-field">
+                                    @Html.TextBox("internal", Model.Search.Internal)
+                                </div> 
+                            </div>
+
+                            <div class="vrstica">
+                                <label>Date From:</label>
+                                <div class="editor-field">
+                                    @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker" })
             
-                                    </div>
                                 </div>
+                            </div>
+
                             <div class="vrstica">
                                 <label>Date To:</label>
                                 <div class="editor-field">
-                                        @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker" })
+                                    @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker" })
                                 </div>
                             </div>
 
@@ -108,7 +114,6 @@
                                     <th>Destination</th>
                                     <th>Order</th>
                                     <th>Exchange Time Stamp</th>  
-                                    <th>Version</th>  
                                     <th>Details</th>
                                 </tr>
                                     
@@ -116,12 +121,11 @@
                                     {
                                         <tr align="center">
                                             <td>@row.Internal.First()</td>
-                                            <td>@row.MsgT.First()</td>
+                                            <td>@String.Join(",", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisAng).FirstOrDefault() ?? row.MsgT.FirstOrDefault())</td>
                                             <td>@row.Sender.First()</td>
                                             <td>@row.Destination.First()</td>
                                             <td>@row.Order.First()</td>
                                             <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
-                                            <td>@row.Version</td>
                                             <td>
                                                 <a href class="message-data">View</a>
                                                 <div style="display: none">
@@ -165,32 +169,6 @@
                             </table> 
             
                         </div>
-
-                        <div class="resultPosition">
-                            @{ Html.RenderPartial("Pagination", new PaginationInfo
-                               {
-                                   PageUrl = Url.SetParameter("page", "!0"),
-                                   CurrentPage = Model.Search.PageIndex,
-                                   PageSize = Model.Search.PageSize,
-                                   TotalItemCount = Model.TotalCount,
-                               }); }  
-                        </div>
-        
-                        <div class="pagesize">
-                            Items per page:@{ var arr = new[] { 5, 10, 15, 20 }; }
-                            @for (var i = 0; i < arr.Length; i++)
-                            {
-                                if (arr[i] == Model.Search.PageSize)
-                                {
-                                    <span>@arr[i]</span>
-                                }
-                                else
-                                {
-                                    <a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@arr[i]</a>
-                                }
-                                @Html.Raw((i == (arr.Length - 1) ? "" : "|"))
-                            }
-                        </div>  
                     </div>
                 }
             }
@@ -203,35 +181,15 @@
                             <div class="vrstica">
                                 <label>Stranka:</label>
                                 <div class="editor-field">
-                                    @*@Html.DropDownList("destination", ((SelectList)ViewBag.DropList).Select(t => new SelectListItem() { Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.Destination) }), "--Select--", Model.Search.Destination)*@
                                     @Html.DropDownList("destination", ((SelectList)ViewBag.DropList).Select(t => new SelectListItem() { Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.Destination) }), (SelectList)ViewBag.DropList)
                                 </div> 
                             </div>
-
-@*                            <div class="vrstica">
-                                <label>Luška številka:</label>
-                                <div class="editor-field">
-                                    @Html.TextBox("order", Model.Search.Order)
-                                </div> 
-                            </div>*@
                             <div class="vrstica">
                                 <label>Interna številka:</label>
                                 <div class="editor-field">
                                     @Html.TextBox("internal", Model.Search.Internal)
                                 </div> 
                             </div>
-@*                            <div class="vrstica">
-                                <label>Datum od:</label>
-                                <div class="editor-field">
-                                    @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker" })
-                                </div>
-                            </div>
-                            <div class="vrstica">
-                                <label>Datum do:</label>
-                                <div class="editor-field">
-                                    @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker" })
-                                </div>
-                            </div>*@
                             <div class="vrstica">
                                 <input class="first-search_btn" type="submit" value="Search"/> 
                             </div>
@@ -261,42 +219,56 @@
                                             <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
                                             <td>@row.Sender.FirstOrDefault()</td>
                                             <td>@row.Order.FirstOrDefault()</td>
-                                            <td>@String.Join(",", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisSlo).FirstOrDefault() ?? row.MsgT.FirstOrDefault() )</td>
+                                            <td>@String.Join(",", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisSlo).FirstOrDefault() ?? row.MsgT.FirstOrDefault())</td>
                                             <td>@row.Exchangetimestamp2.Add(Model.TimeZone.BaseUtcOffset)</td>
                                         </tr>
                                     }
                                 }
                             </table> 
                         </div>
-                            <div class="resultPosition">
-                              @{ Html.RenderPartial("Pagination", new PaginationInfo
-                               {
-                                   PageUrl = Url.SetParameter("page", "!0"),
-                                   CurrentPage = Model.Search.PageIndex,
-                                   PageSize = Model.Search.PageSize,
-                                   TotalItemCount = Model.TotalCount,
-                               }); }  
-                            </div>
-        
-                            <div class="pagesize">
-                                Items per page:@{ var arr = new[] { 10, 20, 30, 40, 50 };}
-                                @for (var i = 0; i < arr.Length; i++)
-                                {
-                                    if (arr[i] == Model.Search.PageSize)
-                                    {
-                                        <span>@arr[i]</span> 
-                                    }
-                                    else
-                                    {
-                                        <a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@arr[i]</a>
-                                    }
-                                    @Html.Raw((i == (arr.Length - 1) ? "" : "|")) 
-                                }
-                                
-                            </div> 
                     </div>
                 }
             }
         }
+        
+        <div class="center-table">
+            <div class="resultPosition">
+                @{ Html.RenderPartial("Pagination", new PaginationInfo
+                   {
+                       PageUrl = Url.SetParameter("page", "!0"),
+                       CurrentPage = Model.Search.PageIndex,
+                       PageSize = Model.Search.PageSize,
+                       TotalItemCount = Model.TotalCount,
+                   }); }  
+            </div>
+        
+        <div class="pagesize">
+            
+            @if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
+            {
+                <text>Items per page: </text>
+            }
+            else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
+            {
+                <text>Zadetkov na stran: </text>
+            }
+
+            @{ var arr = new[] { 10, 15, 20, 25, 30 };}
+            @for (var i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] == Model.Search.PageSize)
+                {
+                    <span>@arr[i]</span> 
+                }
+                else
+                {
+                    <a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@arr[i]</a>
+                }
+                @Html.Raw((i == (arr.Length - 1) ? "" : "|")) 
+            }
+                                
+        </div> 
+
+        </div>    
     }
 }
