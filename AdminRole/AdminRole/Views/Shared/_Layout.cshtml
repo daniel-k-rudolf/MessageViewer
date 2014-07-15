@@ -43,22 +43,24 @@
                                 <li class="@Html.ActivePage("LoginAdmin", "Registracija")">@Html.ActionLink("Edit user", "Registracija", "LoginAdmin")</li>
                                 <li class="@Html.ActivePage("LoginAdmin", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginAdmin")</li>
                                 <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
+                                <p>Welcome: @Html.Encode(User.Identity.Name)</p>
                             }
                             else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
                             {
                                 <li class="@Html.ActivePage("LoginUser", "Index")">@Html.ActionLink("View results", "Index", "LoginUser")</li>
                                 <li class="@Html.ActivePage("LoginUser", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginUser")</li>
                                 <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
+                                <p>Welcome: @Html.Encode(User.Identity.Name)</p>
                             }
                             else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
                             {
-                                @*<li class="@Html.ActivePage("LoginSimpleUserUser", "Index")">@Html.ActionLink("Rezultati", "Index", "LoginSimpleUser")</li>*@
                                 <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Odjava", "LogOut", "Home")</li>
+                                <p>Dobrodošel: @Html.Encode(User.Identity.Name)</p>
                             }
                         }
-                    }
+                    }  
                 }
-                <p>Dobrodošel: @Html.Encode(User.Identity.Name)</p>
+                
             </ul>
         }
         </div>
