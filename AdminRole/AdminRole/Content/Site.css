@@ -14,8 +14,6 @@ header, footer, nav, section {
     display: block;
 }
 
-
-
 /* Styles for basic forms
 -----------------------------------------------------------*/
 fieldset {
@@ -45,7 +43,6 @@ textarea {
 .editor-field2 {
     margin: 15px 0 0 0;
 }
-
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
@@ -238,8 +235,6 @@ textarea {
 	margin-top: 7px;
 }
 
-
-
 /* Custom5 prijavno-okno_create-customer
 -----------------------------------------------------------*/
 
@@ -353,6 +348,7 @@ textarea {
   line-height: 1;
   font-family: 'Lato', sans-serif;
 }
+
 #cssmenu {
   border: 1px solid #33487e;
   -webkit-border-radius: 5px;
@@ -362,6 +358,7 @@ textarea {
   border-radius: 5px;
   width: auto;
 }
+
 #cssmenu ul {
   zoom: 1;
   background: #7e94cc;
@@ -379,20 +376,24 @@ textarea {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
+
 #cssmenu ul:before {
   content: '';
   display: block;
 }
+
 #cssmenu ul:after {
   content: '';
   display: table;
   clear: both;
 }
+
 #cssmenu li {
   float: left;
   margin: 0 5px 0 0;
   border: 1px solid transparent;
 }
+
 #cssmenu li a {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -446,6 +447,7 @@ textarea {
   border-radius: 5px;
   border: 1px solid #7e94cc;
 }
+
 #cssmenu li.active a {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -459,6 +461,7 @@ textarea {
   -webkit-box-shadow: inset 0 5px 10px #33487e;
   box-shadow: inset 0 5px 10px #33487e;
 }
+
 #cssmenu li:hover {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -467,6 +470,7 @@ textarea {
   border-radius: 5px;
   border: 1px solid #7e94cc;
 }
+
 #cssmenu li:hover a {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -501,11 +505,6 @@ textarea {
 .dani-tabela a:hover {color: whitesmoke;}
 .dani-tabela tr:hover { background-color: #446bb3; color: white;}
 
-/*table { background-color : #fff; color : #453}
-thead { background-color: #446bb3  ; color :#fff ; padding:4px ; line-height: 30px; }
-tbody tr:nth-child(even) {background: #CCC}
-tbody tr:nth-child(odd) {background: #FFF}*/
-
 /* tabela2
 -----------------------------------------------------------*/
 .dani-tabela2 {
@@ -525,7 +524,6 @@ tbody tr:nth-child(odd) {background: #FFF}*/
 .dani-tabela2 a:visited {color: darkorange; font-weight: bold;}
 .dani-tabela2 a:hover {color: whitesmoke;}
 .dani-tabela2 tr:hover { background-color: #446bb3;color: white;}
-
 
 table tr td, table tr th {padding: 3px;}
 input[type="text"], select {padding: 3px;}
@@ -569,30 +567,36 @@ tbody tr:nth-child(odd) {background: #FFF}
     padding-top: 3px;
 	float: left;
 }
+
 .pagination a, .pagination span 
 {
 	border: solid 1px #888888;
 	padding: 2px 5px;
 	margin: 2px;
 }
+
 .pagination a 
 {
 	text-decoration: none;
 }
+
 .pagination a:hover
 {
 	background-color: #FFFFCC;
 }
+
 .pagination .currentPage
 {
 	font-weight: bold;
 	background-color: #888888;
 	color: White;
 }
+
 .pagination .disabledPage 
 {
 	color: #aaaaaa;
 }
+
 /* page size */
 .pagesize 
 {
@@ -600,6 +604,7 @@ tbody tr:nth-child(odd) {background: #FFF}
     float: right;
     margin-right: 155px;
 }
+
 .pagesize span 
 {
 	font-weight: bold;
@@ -616,16 +621,6 @@ tbody tr:nth-child(odd) {background: #FFF}
     /*margin-top: 30px;*/
     margin: 30px auto 0 0;
 }
-
-/*tabela customer*/
-/*.tabela-customer {
-    margin-top: 10px;
-}*/
-
-/*createcustomertype*/
-/*.createcustomertype {
-    margin-top: 10px;
-}*/
 
 /*delete message*/
 .deleteMessage {
@@ -654,7 +649,6 @@ tbody tr:nth-child(odd) {background: #FFF}
 .custommers-tabela a:visited {color: darkorange; font-weight: bold;}
 .custommers-tabela a:hover {color: whitesmoke;}
 .custommers-tabela tr:hover { background-color: #446bb3;color: white;}
-
 
 /*Search1*/
 
@@ -725,8 +719,8 @@ h3 {
 }
 
 #container {
-   min-height:100%;
-   position:relative;
+    min-height:100%;
+    position:relative;
 }
 
 #body {
