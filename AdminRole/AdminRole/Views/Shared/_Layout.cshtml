@@ -23,55 +23,59 @@
 
     </head>
     
-        <div id="containter">
+    <div id="containter">
+        
         <div id="cssmenu">
-        @if (Request.IsAuthenticated)
-        {  
-            <ul>
-                <b>Message Viewer v1.0 </b>
-                @{
-                    string userName = System.Web.HttpContext.Current.User.Identity.Name;
-                    using (var dbUs = new userDbEntities())
-                    {
-                        var currentUser = dbUs.UsersTables.FirstOrDefault(u => u.username == userName);
-                        if (currentUser != null)
+            @if (Request.IsAuthenticated)
+            {  
+                <ul>
+                    <b>Message Viewer v1.0 </b>
+                    @{
+                        string userName = System.Web.HttpContext.Current.User.Identity.Name;
+                        using (var dbUs = new userDbEntities())
                         {
+                            var currentUser = dbUs.UsersTables.FirstOrDefault(u => u.username == userName);
+                            if (currentUser != null)
+                            {
 
-                            if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Administrator)
-                            {
-                                <li class="@Html.ActivePage("LoginAdmin", "AdminIndex")">@Html.ActionLink("View results", "AdminIndex", "LoginAdmin")</li>
-                                <li class="@Html.ActivePage("LoginAdmin", "Registracija")">@Html.ActionLink("Edit user", "Registracija", "LoginAdmin")</li>
-                                <li class="@Html.ActivePage("LoginAdmin", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginAdmin")</li>
-                                <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
-                                <p>Welcome: @Html.Encode(User.Identity.Name)</p>
+                                if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Administrator)
+                                {
+                                    <li class="@Html.ActivePage("LoginAdmin", "AdminIndex")">@Html.ActionLink("View results", "AdminIndex", "LoginAdmin")</li>
+                                    <li class="@Html.ActivePage("LoginAdmin", "Registracija")">@Html.ActionLink("Edit user", "Registracija", "LoginAdmin")</li>
+                                    <li class="@Html.ActivePage("LoginAdmin", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginAdmin")</li>
+                                    <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
+                                    <p>Welcome: @Html.Encode(User.Identity.Name)</p>
+                                }
+                                else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
+                                {
+                                    <li class="@Html.ActivePage("LoginUser", "Index")">@Html.ActionLink("View results", "Index", "LoginUser")</li>
+                                    <li class="@Html.ActivePage("LoginUser", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginUser")</li>
+                                    <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
+                                    <p>Welcome: @Html.Encode(User.Identity.Name)</p>
+                                }
+                                else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
+                                {
+                                    <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Odjava", "LogOut", "Home")</li>
+                                    <p>Dobrodošel: @Html.Encode(User.Identity.Name)</p>
+                                }
                             }
-                            else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
-                            {
-                                <li class="@Html.ActivePage("LoginUser", "Index")">@Html.ActionLink("View results", "Index", "LoginUser")</li>
-                                <li class="@Html.ActivePage("LoginUser", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginUser")</li>
-                                <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
-                                <p>Welcome: @Html.Encode(User.Identity.Name)</p>
-                            }
-                            else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
-                            {
-                                <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Odjava", "LogOut", "Home")</li>
-                                <p>Dobrodošel: @Html.Encode(User.Identity.Name)</p>
-                            }
-                        }
-                    }  
-                }
+                        }  
+                    }
                 
-            </ul>
-        }
+                </ul>
+            }
         </div>
+
         <div id="body">
             @RenderBody()
             @*@Scripts.Render("~/bundles/jquery")*@
             @*@RenderSection("scripts", required: false)*@
         </div>
-            <div id="footer">
-                <a href="http://www.actual-it.si/">www.actual-it.si</a>
-            </div>
+
+        <div id="footer">
+            <a href="http://www.actual-it.si/">www.actual-it.si</a>
+        </div>
+
     </div>
 
 </html>
