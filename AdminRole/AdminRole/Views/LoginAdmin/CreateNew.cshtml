@@ -37,14 +37,14 @@
                 @Html.DropDownList("VlogaNaziv", ((SelectList) ViewBag.DropListVloge).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.SelectedVloga)}), Model.VlogaNaziv)
             </div>
 
-            <label>Destination</label>
+            <label>Customer</label>
             <div class="editor-label">
 
             </div>
-            <button class="add-custom">Add Destination</button>
+            <button class="add-custom">Add Customer</button>
             <table class="custommers-tabela">
                 <thead>
-                    <th>Destinations</th>
+                    <th>Customers</th>
                 </thead>
                 <tbody>
                     @for (var i=0; i < Model.User.CustomerTables.Count; i++)
