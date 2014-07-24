@@ -20,6 +20,8 @@ namespace AdminRole.Models
 {
     public class SpremenljivkeSolr
     {
+        public int StevilkaDogodek { get; set; }
+
         [SolrField("sequentialid")]
         public long Sequ { get; set; }
 
