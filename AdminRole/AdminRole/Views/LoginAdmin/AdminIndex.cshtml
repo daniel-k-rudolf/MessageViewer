@@ -40,6 +40,27 @@
 
 </script>
 
+<script type="text/javascript">
+    function ValidateNumber(e) {
+        var evt = (e) ? e : window.event;
+        var charCode = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".my-link").on("click", function () {
+            $(".status").hide();
+            var linkId = $(this).data("id");
+            $("." + linkId).show();
+        });
+    });
+</script>
+
 <div class="center-table">
         <div class="center-vrstice">
         <form method="get" action="@Url.Action("AdminIndex")">
@@ -53,13 +74,13 @@
         <div class="vrstica">
             <label>Order:</label>
             <div class="editor-field">
-                @Html.TextBox("order", Model.Search.Order)
+                @Html.TextBox("order", Model.Search.Order, new {onkeydown = "return ValidateNumber(event);"})
             </div> 
         </div>
         <div class="vrstica">
             <label>Internal:</label>
             <div class="editor-field">
-                @Html.TextBox("internal", Model.Search.Internal)
+                @Html.TextBox("internal", Model.Search.Internal, new {maxlength = 6, onkeydown = "return ValidateNumber(event);"})
             </div> 
         </div>
         <div class="vrstica">
@@ -124,7 +145,11 @@
                     <th>Internal</th>
                     <th>Seq. ID</th>
                     <th>Extid</th>
-                    <th>Msg. Type</th> 
+                    <th>
+                        Msg. Type
+                        <a class="my-link" data-id="lnk1" href="#">Eng</a> /
+                        <a class="my-link" data-id="lnk2" href="#">Slo</a>
+                    </th>
                     <th>Sender</th>
                     <th>Dest</th>
                     <th>Order</th>
@@ -141,7 +166,10 @@
                         <td>@row.Internal.First()</td>
                         <td>@row.Sequ</td>
                         <td>@row.ExtId</td>
-                        <td>@row.MsgT.First()</td>
+                        <td>
+                            <div class="status lnk1">@String.Join("", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisAng).FirstOrDefault() ?? row.MsgT.FirstOrDefault())</div>
+                            <div class="status lnk2">@String.Join("", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisSlo).FirstOrDefault() ?? row.MsgT.FirstOrDefault())</div>
+                        </td>
                         <td>@row.Sender.First()</td>
                         <td>@row.Destination.First()</td>
                         <td>@row.Order.First()</td>

@@ -421,7 +421,7 @@ textarea {
   border: 1px solid transparent;
   font-size: 16px;
   float: right;
-    font-weight: bold;
+  font-weight: bold;
 }
 
 #cssmenu b {
@@ -756,4 +756,59 @@ h3 {
 .simplesporocilo {
 
     background-color: whitesmoke;
+}
+
+td > .status:last-child {
+    display: none;
+}
+
+th > .status:last-child {
+    display: none;
+}
+
+label > .status:last-child {
+    display: none;
+}
+
+li > .status:last-child {
+    display: none;
+}
+
+p > .status:last-child {
+    display: none;
+}
+
+b > .status:last-child {
+    display: none;
+}
+
+.pozdravno-okno {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  padding: 9.5px 15px 9px 15px;
+  display: block;
+  text-decoration: none;
+  color: #ffffff;
+  border: 1px solid transparent;
+  font-size: 16px;
+  float: right;
+  font-weight: bold;
+}
+
+.prevod {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  padding: 9.5px 15px 9px 15px;
+  display: block;
+  text-decoration: none;
+  color: #ffffff;
+  border: 1px solid transparent;
+  font-size: 16px;
+  float: right;
 }
