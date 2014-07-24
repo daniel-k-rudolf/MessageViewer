@@ -1,6 +1,7 @@
 ﻿@model AdminRole.Models.SpremenljivkeView
 
 @using System.Activities.Expressions
+@using System.Activities.Statements
 @using System.Data
 @using System.Data.Common.CommandTrees.ExpressionBuilder
 @using System.Security.AccessControl
@@ -249,11 +250,10 @@
                             </tr>
                             @if (Model.Spremenljivke != null)
                             {
-                                int dogodek = 1;
                                 foreach (var row in Model.Spremenljivke)
                                 {
                                 <tr align="center">
-                                    <td><strong>[@(dogodek++)]</strong></td>
+                                    <td><strong>[@row.StevilkaDogodek]</strong></td>
                                     <td>@row.Internal.FirstOrDefault()</td>
                                     <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
                                     <td>@row.Order.FirstOrDefault()</td>
@@ -304,21 +304,30 @@
                                     </td>
                                     <td>
                                         @{
-                                        var arr1 = new[] { 20, 30, 40, @allItems + 40 };
-                                        for (var i = 0; i < arr1.Length; i++)
-                                        {
-                                            if (arr1[i] == Model.Search.PageSize)
+                                            var arr1 = new[] { 5, 10, 20, 30, @allItems };
+                                            for (var i = 0; i < arr1.Length; i++)
                                             {
-                                                                <span>@arr1[i]</span>
-                                            }
-                                            else
-                                            {
-                                                string a = "Prikaži vse";
-                                                var linkText = (i < arr1.Length - 1) ? arr1[i].ToString() : @a;
-                                                                <a href="@Url.SetParameters(new { pagesize = arr1[i], page = 1 })">@linkText</a>
-                                            }
-                                            @Html.Raw((i == (arr1.Length - 1) ? "" : "|"))
-                                        }    
+                                                if (arr1[i] == Model.Search.PageSize)
+                                                {
+                                                    if (i == arr1.Length - 1)
+                                                    {
+                                                        <span>>></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@arr1[i]</span>   
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    string text = ">>";
+
+                                                    var linkText = (i < arr1.Length - 1) ? arr1[i].ToString() : @text;
+                                                    <a href="@Url.SetParameters(new { pagesize = arr1[i], page = 1 })">@linkText</a>
+                                                }
+                                                @Html.Raw((i == (arr1.Length - 1) ? "" : "|"))
+                                            
+                                            }    
                                         }
                                     </td>
                                 </tr>
