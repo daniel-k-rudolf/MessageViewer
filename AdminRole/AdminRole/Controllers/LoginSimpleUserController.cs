@@ -181,8 +181,8 @@ namespace AdminRole.Controllers
                     var start = (parameters.PageIndex - 1) * parameters.PageSize;
                     var matchingSpremenljivke = solr.Query(BuildQuery(parameters), new QueryOptions
                     {
-                        Rows = parameters.PageSize,
-                        Start = start,
+                        //Rows = parameters.PageSize,
+                        //Start = start,
                         OrderBy = order.Concat(GetSelectedSort(parameters)).ToList(),
                         Grouping = new GroupingParameters()
                         {
@@ -336,6 +336,8 @@ namespace AdminRole.Controllers
 
                                     if (slovarSolr.Keys.Count > 0)
                                     {
+                                        int stDogodek = 1;
+
                                         foreach (int key in slovarSolr.Keys)
                                         {
                                             var seznamSolrSpre = slovarSolr[key];
@@ -343,6 +345,7 @@ namespace AdminRole.Controllers
                                             #region PodatkiZaPrikaz
                                             SpremenljivkeSolr spremenljivkeSolr = new SpremenljivkeSolr();
 
+                                            spremenljivkeSolr.StevilkaDogodek = stDogodek;
                                             spremenljivkeSolr.Internal = seznamSolrSpre[0].Internal;
                                             spremenljivkeSolr.Exchangetimestamp = seznamSolrSpre[0].Exchangetimestamp;
                                             spremenljivkeSolr.Order = seznamSolrSpre[seznamSolrSpre.Count - 1].Order;
@@ -351,6 +354,8 @@ namespace AdminRole.Controllers
                                             spremenljivkeSolr.Sender = seznamSolrSpre[0].Sender;
 
                                             seznam.Add(spremenljivkeSolr);
+                                            stDogodek++;
+
                                             #endregion
                                         }
                                     }
@@ -364,9 +369,23 @@ namespace AdminRole.Controllers
 
                     #endregion
 
+                    List<SpremenljivkeSolr> tmpSeznam = new List<SpremenljivkeSolr>();
+
+                    for (int i = start; i < (start + parameters.PageSize); i++)
+                    {
+                        if (i < seznam.Count)
+                        {
+                            tmpSeznam.Add(seznam[i]);                            
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
                     view = new SpremenljivkeView
                     {
-                        Spremenljivke = seznam,
+                        Spremenljivke = tmpSeznam,
                         Search = parameters,
                         TotalCount = seznam.Count,
                         TimeZone = timeZone,
