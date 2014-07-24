@@ -74,7 +74,6 @@ namespace AdminRole.Controllers
                             "OR");
                 }
 
-
                 //naredi listo (poizvedbo) po ostalih spremenlivkah in destination ali sender
                 var solrQueries = new List<ISolrQuery> { queryInList };
 
@@ -93,7 +92,7 @@ namespace AdminRole.Controllers
                             new SolrQueryByField("internal", parameters.Internal),
                             new SolrQueryByField("internal", valueNoZero) 
                         }, "OR"));
-                        
+
                     }
 
                     else
@@ -105,7 +104,7 @@ namespace AdminRole.Controllers
                             new SolrQueryByField("internal", parameters.Internal.PadLeft(nule, '0')),
                             new SolrQueryByField("internal", parameters.Internal)
                         }, "OR"));
-                        
+
                     }
 
                 }
@@ -114,7 +113,6 @@ namespace AdminRole.Controllers
 
                 return new SolrMultipleCriteriaQuery(solrQueries, "AND");
             }
-
         }
 
         public SortOrder[] GetSelectedSort(SearchParameters parameters)
@@ -196,9 +194,9 @@ namespace AdminRole.Controllers
                                         .Groups.GroupBy(r => r.Documents)
                                         .Select(r => r.Key)
                                         .Select(r => r.FirstOrDefault()).ToList();
-                    
+
                     #region Internal process
-                    
+
                     var seznam = new List<SpremenljivkeSolr>();
 
                     if (matchingSpremenljivke != null && matchingSpremenljivke.Count > 0)
@@ -362,7 +360,6 @@ namespace AdminRole.Controllers
                             }
                             #endregion
                         }
-                        
                     }
 
                     #endregion
@@ -392,54 +389,5 @@ namespace AdminRole.Controllers
                 .Where(c => !string.IsNullOrEmpty(c))
                     .ToArray());
         }
-
-        public ActionResult KraticeView(string sortOrder, string searchString, string currentFilter, int? pageKrat)
-        {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.Actice = true;
-            ViewBag.KratView = String.IsNullOrEmpty(sortOrder) ? "krat_desc" : "";
-            //Test
-            try
-            {
-                using (var dbKrat = new userDbEntities())
-                {
-                    if (searchString != null)
-                    {
-                        pageKrat = 1;
-                    }
-                    else
-                    {
-                        searchString = currentFilter;
-                    }
-
-                    ViewBag.CurrentFilter = searchString;
-                    var kraticeMsg = from k in dbKrat.KraticeTables select k;
-                    if (!String.IsNullOrEmpty(searchString))
-                    {
-                        kraticeMsg = kraticeMsg.Where(k => k.Kratica.ToUpper().Contains(searchString.ToUpper()));
-                    }
-                    switch (sortOrder)
-                    {
-                        case "krat_desc":
-                            kraticeMsg = kraticeMsg.OrderByDescending(k => k.Kratica);
-                            break;
-                        default:
-                            kraticeMsg = kraticeMsg.OrderBy(k => k.Id_K);
-                            break;
-                    }
-                    int pageSize = 10;
-                    int pageNumber = (pageKrat ?? 1);
-                    return View("../LoginUser/KraticeView", kraticeMsg.ToPagedList(pageNumber, pageSize));
-
-                }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
     }
 }

@@ -16,7 +16,6 @@ namespace AdminRole.Controllers
     [Authorize, HandleError]
     public class LoginAdminController : Controller
     {
-
         private userDbEntities _entities = new userDbEntities();
 
         public ISolrQuery BuildQuery(SearchParameters parameters)
@@ -28,8 +27,8 @@ namespace AdminRole.Controllers
             using (var dbUs = new userDbEntities())
             {
                 var kdoseprijavlja = (from user in dbUs.UsersTables
-                    where user.username == tmpUser
-                    select user.userID).FirstOrDefault();
+                                      where user.username == tmpUser
+                                      select user.userID).FirstOrDefault();
 
                 //get all destinations for user userid
                 var seznam = dbUs.CustomerTables.Where(m => m.UserId == kdoseprijavlja).Select(m => m.Customer);
@@ -60,7 +59,7 @@ namespace AdminRole.Controllers
                             "OR");
                 }
 
-                var solrQueries = new List<ISolrQuery> {queryInList};
+                var solrQueries = new List<ISolrQuery> { queryInList };
 
                 #region OstalaPolja
 
@@ -229,7 +228,6 @@ namespace AdminRole.Controllers
         [Authorize]
         public ActionResult Registracija(string sortOrder, string searchString, string currentFilter, int? page)
         {
-
             ViewBag.CurrentSort = sortOrder;
             ViewBag.Active = true;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -272,17 +270,16 @@ namespace AdminRole.Controllers
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
-            
         }
 
         //NI CUSTOMER AMPAK DESTIONATION - UPORABI ZA SOLR!!!
         public ActionResult CreateNew(UserModel userModel, string act = null, int idx = 0) //UserModel za edit!!!!!
         {
             using (var dbContext = new userDbEntities())
-            {         
+            {
                 if (userModel.User == null)
                 {
                     userModel.User = new UsersTable();
@@ -310,7 +307,7 @@ namespace AdminRole.Controllers
                     case "deletecustom":
                         userModel.User.CustomerTables.RemoveAt(idx);
                         break;
-                    case "save":                    
+                    case "save":
                         foreach (var customer in userModel.User.CustomerTables)
                         {
                             customer.CustomType = dbContext.CustomTypes.Find(customer.CustomType.Id_NewCustomerType);
@@ -331,14 +328,13 @@ namespace AdminRole.Controllers
                                 }
                                 else
                                 {
-
                                     userModel.User.password = crypto.Compute(userModel.User.password);
                                     userModel.User.passwordSalt = crypto.Salt;
 
                                     var vlogaUporabnika = dbContext.VlogaUporabnikas.FirstOrDefault(v => v.Naziv == userModel.VlogaNaziv);
                                     if (vlogaUporabnika != null)
                                     {
-                                        userModel.User.VlogaUporabnika = vlogaUporabnika;                                                                                
+                                        userModel.User.VlogaUporabnika = vlogaUporabnika;
                                     }
 
                                     var count = dbContext.UsersTables.Count(u => u.username == userModel.User.username);
@@ -365,7 +361,7 @@ namespace AdminRole.Controllers
                                 {
                                     dbUser.CustomerTables.Add(custom);
                                 }
-                                    
+
                             }
                             foreach (var custom in dbUser.CustomerTables.ToList())
                             {
@@ -386,7 +382,7 @@ namespace AdminRole.Controllers
             ViewBag.CurrentSortCust = sortOrderCust;
             ViewBag.Active = true;
             ViewBag.CustView = String.IsNullOrEmpty(sortOrderCust) ? "cust_desc" : "";
-            
+
             try
             {
                 using (var dbCust = new userDbEntities())
@@ -422,7 +418,7 @@ namespace AdminRole.Controllers
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
         }
@@ -474,7 +470,6 @@ namespace AdminRole.Controllers
         {
             using (var dbVn = new userDbEntities())
             {
-
                 var edit2 = dbVn.UsersTables.Where(o => o.userID == id)
                     .Include(o => o.CustomerTables.Select(c => c.CustomType))
                     .AsNoTracking()
@@ -484,7 +479,7 @@ namespace AdminRole.Controllers
                 {
                     return HttpNotFound();
                 }
-                return Edit(new UserModel(){User = edit2});
+                return Edit(new UserModel() { User = edit2 });
             }
         }
 
@@ -495,7 +490,6 @@ namespace AdminRole.Controllers
         {
             using (var dbContext = new userDbEntities())
             {
-
                 if (userModel.User == null)
                 {
                     userModel.User = new UsersTable();
@@ -527,29 +521,28 @@ namespace AdminRole.Controllers
                             customer.CustomType = dbContext.CustomTypes.Find(customer.CustomType.Id_NewCustomerType);
                         }
                         var dbUser1 = dbContext.UsersTables.Find(userModel.User.userID);
-                            dbUser1.TimeZoneId = userModel.User.TimeZoneId;
-                            foreach (var custom in userModel.User.CustomerTables)
+                        dbUser1.TimeZoneId = userModel.User.TimeZoneId;
+                        foreach (var custom in userModel.User.CustomerTables)
+                        {
+                            if (custom.CustomerID == 0)
                             {
-                                if (custom.CustomerID == 0)
-                                {
-                                    dbUser1.CustomerTables.Add(custom);
-                                }
+                                dbUser1.CustomerTables.Add(custom);
+                            }
+                        }
+                        foreach (var custom in dbUser1.CustomerTables.ToList())
+                        {
+                            var modelCustom =
+                                userModel.User.CustomerTables.FirstOrDefault(o => o.CustomerID == custom.CustomerID);
+                            if (modelCustom != null) //update it
+                            {
+                                custom.CustomType =
+                                    dbContext.CustomTypes.Find(modelCustom.CustomType.Id_NewCustomerType);
+                            }
 
-                            }
-                            foreach (var custom in dbUser1.CustomerTables.ToList())
-                            {
-                                var modelCustom =
-                                    userModel.User.CustomerTables.FirstOrDefault(o => o.CustomerID == custom.CustomerID);
-                                if (modelCustom != null) //update it
-                                {
-                                    custom.CustomType =
-                                        dbContext.CustomTypes.Find(modelCustom.CustomType.Id_NewCustomerType);
-                                }
-                                
-                                if (userModel.User.CustomerTables.All(o => o.CustomerID != custom.CustomerID))
-                                    dbContext.Entry(custom).State = EntityState.Deleted;
-                            }
-                            dbContext.SaveChanges();
+                            if (userModel.User.CustomerTables.All(o => o.CustomerID != custom.CustomerID))
+                                dbContext.Entry(custom).State = EntityState.Deleted;
+                        }
+                        dbContext.SaveChanges();
                         break;
                     case "save":
                         foreach (var customer in userModel.User.CustomerTables)
@@ -563,39 +556,37 @@ namespace AdminRole.Controllers
                         if (vlogaUporabnika != null)
                         {
                             dbUser.VlogaUporabnika = vlogaUporabnika;
-                        }         
+                        }
 
                         // uredi uporabnikove stranke
-                            foreach (var custom in userModel.User.CustomerTables)
+                        foreach (var custom in userModel.User.CustomerTables)
+                        {
+                            if (custom.CustomerID == 0)
                             {
-                                if (custom.CustomerID == 0)
-                                {
-                                    dbUser.CustomerTables.Add(custom);
-                                    custom.UsersTable = dbUser;
-                                    custom.Customer = custom.CustomType.Id_NewCustomerType;
-                                    custom.UserId = dbUser.userID;
-                                    dbContext.Entry(custom).State = EntityState.Added;
-                                }
+                                dbUser.CustomerTables.Add(custom);
+                                custom.UsersTable = dbUser;
+                                custom.Customer = custom.CustomType.Id_NewCustomerType;
+                                custom.UserId = dbUser.userID;
+                                dbContext.Entry(custom).State = EntityState.Added;
+                            }
+                        }
+
+                        foreach (var custom in dbUser.CustomerTables.ToList())
+                        {
+                            var modelCustom =
+                                userModel.User.CustomerTables.FirstOrDefault(o => o.CustomerID == custom.CustomerID);
+                            if (modelCustom != null && custom.CustomerID > 0)//update it
+                            {
+                                custom.CustomType =
+                                    dbContext.CustomTypes.Find(modelCustom.CustomType.Id_NewCustomerType);
                             }
 
-                        
-                            foreach (var custom in dbUser.CustomerTables.ToList())
-                            {
-                                var modelCustom =
-                                    userModel.User.CustomerTables.FirstOrDefault(o => o.CustomerID == custom.CustomerID);
-                                if (modelCustom != null && custom.CustomerID > 0)//update it
-                                {
-                                    custom.CustomType =
-                                        dbContext.CustomTypes.Find(modelCustom.CustomType.Id_NewCustomerType);
-                                }
-                                
 
-                                if (userModel.User.CustomerTables.All(o => o.CustomerID != custom.CustomerID))
-                                    dbUser.CustomerTables.Remove(custom);
+                            if (userModel.User.CustomerTables.All(o => o.CustomerID != custom.CustomerID))
+                                dbUser.CustomerTables.Remove(custom);
+                        }
 
-                            }
-
-                            dbContext.SaveChanges();
+                        dbContext.SaveChanges();
                         break;
                 }
                 return View("Edit", userModel);
@@ -717,7 +708,6 @@ namespace AdminRole.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -822,6 +812,5 @@ namespace AdminRole.Controllers
             }
             return View(vnEdit);
         }
-
     }
 }

@@ -17,13 +17,10 @@ namespace AdminRole.Controllers
         //[HttpGet]
         public ActionResult Index()
         {
-
             string userName = System.Web.HttpContext.Current.User.Identity.Name;
-
             using (var dbUs = new userDbEntities())
             {
                 var currentUser = dbUs.UsersTables.FirstOrDefault(u => u.username == userName);
-
                 if (currentUser != null)
                 {
                     //return view for admin
@@ -51,12 +48,9 @@ namespace AdminRole.Controllers
                 }
                 else
                 {
-                    
                     return View("Index");
-
                 }
             }
-
         }
 
         [HttpPost]
@@ -80,7 +74,7 @@ namespace AdminRole.Controllers
                             else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
                             {
                                 FormsAuthentication.SetAuthCookie(uporabnik.Username, false);
-                                return RedirectToAction("Index", "LoginUser"); 
+                                return RedirectToAction("Index", "LoginUser");
                             }
                             else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
                             {
@@ -89,14 +83,14 @@ namespace AdminRole.Controllers
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Wrong username or password!");  
+                                ModelState.AddModelError("", "Wrong username or password!");
                             }
                         }
                         else
                         {
                             ModelState.AddModelError("", "Wrong username or password!");
                         }
-                    }  
+                    }
                 }
                 else
                 {
@@ -123,7 +117,7 @@ namespace AdminRole.Controllers
                 if (user != null)
                 {
                     if (user.password == crypto.Compute(passSol, user.passwordSalt))
-                    {  
+                    {
                         isValid = true;
                     }
                 }

@@ -49,7 +49,7 @@ namespace AdminRole.Controllers
                 var seznam = dbUs.CustomerTables.Where(m => m.UserId == kdoseprijavlja).Select(m => m.Customer);
 
                 var seznam2 = dbUs.CustomTypes.Where(m => seznam.Contains(m.Id_NewCustomerType)).Select(m => m.CustomerType);
-                
+
                 //Lista za dodajanje katerih customerjev ima posamezni uporabnik
                 List<string> result = new List<string>();
 
@@ -83,7 +83,7 @@ namespace AdminRole.Controllers
                 }
 
                 //naredi listo (poizvedbo) po ostalih spremenlivkah in destination ali sender
-                var solrQueries = new List<ISolrQuery> {queryInList};
+                var solrQueries = new List<ISolrQuery> { queryInList };
 
                 #region OstaleSpremenljivke
 
@@ -111,13 +111,13 @@ namespace AdminRole.Controllers
                             new SolrQueryByField("internal", parameters.Internal),
                             new SolrQueryByField("internal", valueNoZero)
                         }, "OR"));
-                        
+
                     }
 
                     else
                     {
 
-                        var nule = str.Length+(6-str.Length);
+                        var nule = str.Length + (6 - str.Length);
                         solrQueries.Add(new SolrMultipleCriteriaQuery(new[]
                         {
                             new SolrQueryByField("internal", parameters.Internal.PadLeft(nule, '0')),
@@ -131,14 +131,13 @@ namespace AdminRole.Controllers
 
                 #endregion;
 
-                return new SolrMultipleCriteriaQuery(solrQueries, "AND"); 
+                return new SolrMultipleCriteriaQuery(solrQueries, "AND");
             }
-            
         }
-        
+
         public SortOrder[] GetSelectedSort(SearchParameters parameters)
         {
-           return new[] { SortOrder.Parse(parameters.Sort) }.Where(o => o != null).ToArray();
+            return new[] { SortOrder.Parse(parameters.Sort) }.Where(o => o != null).ToArray();
         }
 
         [Authorize]
@@ -147,7 +146,6 @@ namespace AdminRole.Controllers
             {
                 try
                 {
-
                     TimeZoneInfo timeZone;
                     using (var dbContext = new userDbEntities())
                     {
@@ -158,31 +156,30 @@ namespace AdminRole.Controllers
 
                         #region DropDownList
 
-                            //identificiraj uporabnika
-                            string tmpUser = System.Web.HttpContext.Current.User.Identity.Name;
+                        //identificiraj uporabnika
+                        string tmpUser = System.Web.HttpContext.Current.User.Identity.Name;
 
-                            //najdi userja v bazi in primerjaj njegovo uporabniško ime z Identity name
-                                var kdoseprijavlja = (from dllist in dbContext.UsersTables
-                                                      where dllist.username == tmpUser
-                                                      select dllist.userID).FirstOrDefault();
+                        //najdi userja v bazi in primerjaj njegovo uporabniško ime z Identity name
+                        var kdoseprijavlja = (from dllist in dbContext.UsersTables
+                                              where dllist.username == tmpUser
+                                              select dllist.userID).FirstOrDefault();
 
-                                //get all destinations for user userid
-                                var seznam = dbContext.CustomerTables.Where(m => m.UserId == kdoseprijavlja).Select(m => m.Customer);
+                        //get all destinations for user userid
+                        var seznam = dbContext.CustomerTables.Where(m => m.UserId == kdoseprijavlja).Select(m => m.Customer);
 
-                                var seznam2 = dbContext.CustomTypes.Where(m => seznam.Contains(m.Id_NewCustomerType)).Select(m => m.CustomerType);
-                
-                                List<string> result = new List<string>();
+                        var seznam2 = dbContext.CustomTypes.Where(m => seznam.Contains(m.Id_NewCustomerType)).Select(m => m.CustomerType);
 
-                                foreach (var customer in seznam2)
-                                {
-                                    result.Add(customer);
-                                }
+                        List<string> result = new List<string>();
+
+                        foreach (var customer in seznam2)
+                        {
+                            result.Add(customer);
+                        }
 
                         ViewBag.DropList = new SelectList(result);
                         ViewBag.Destination = parameters.Destination;
 
                         #endregion
-
                     }
 
                     var order = new SortOrder[] { new SortOrder("sequentialid", Order.DESC), new SortOrder("exchangetimestamp", Order.DESC) };
@@ -224,7 +221,6 @@ namespace AdminRole.Controllers
                     throw;
                 }
             }
-
         }
 
         private string GetSpellCheckingResult(SolrQueryResults<SpremenljivkeSolr> matchingSpremenljivke)
@@ -253,7 +249,7 @@ namespace AdminRole.Controllers
                     {
                         searchString = currentFilter;
                     }
-                    
+
                     ViewBag.CurrentFilter = searchString;
                     var kraticeMsg = from k in dbKrat.KraticeTables select k;
                     if (!String.IsNullOrEmpty(searchString))
@@ -272,16 +268,13 @@ namespace AdminRole.Controllers
                     int pageSize = 10;
                     int pageNumber = (pageKrat ?? 1);
                     return View(kraticeMsg.ToPagedList(pageNumber, pageSize));
-
                 }
-
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
         }
-
     }
 }
