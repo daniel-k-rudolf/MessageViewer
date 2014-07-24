@@ -4,78 +4,101 @@
 @using AdminRole.Models
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <title>@ViewBag.Title</title>
-        <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
-        <link rel="icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-        <link href="@Url.Content("~/Content/DateTimePicker.css")" rel="stylesheet" type="text/css" />
-        <script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
-        <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
-        <script type="text/javascript" src="~/Scripts/jquery.simplemodal-1.4.4.js"></script>
-        <script type="text/javascript" src="~/Scripts/timepicker.js"></script>
-        <link type='text/css' href='~/Content/basic.css' rel='stylesheet' media='screen' />
-        <link type='text/css' href='~/Content/basic_ie.css' rel='stylesheet' media='screen' />
-
-    </head>
-    
-    <div id="containter">
-        
-        <div id="cssmenu">
-            @if (Request.IsAuthenticated)
-            {  
-                <ul>
-                    <b>Message Viewer v1.0 </b>
-                    @{
-                        string userName = System.Web.HttpContext.Current.User.Identity.Name;
-                        using (var dbUs = new userDbEntities())
-                        {
-                            var currentUser = dbUs.UsersTables.FirstOrDefault(u => u.username == userName);
-                            if (currentUser != null)
-                            {
-
-                                if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Administrator)
-                                {
-                                    <li class="@Html.ActivePage("LoginAdmin", "AdminIndex")">@Html.ActionLink("View results", "AdminIndex", "LoginAdmin")</li>
-                                    <li class="@Html.ActivePage("LoginAdmin", "Registracija")">@Html.ActionLink("Edit user", "Registracija", "LoginAdmin")</li>
-                                    <li class="@Html.ActivePage("LoginAdmin", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginAdmin")</li>
-                                    <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
-                                    <p>Welcome: @Html.Encode(User.Identity.Name)</p>
-                                }
-                                else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
-                                {
-                                    <li class="@Html.ActivePage("LoginUser", "Index")">@Html.ActionLink("View results", "Index", "LoginUser")</li>
-                                    <li class="@Html.ActivePage("LoginUser", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginUser")</li>
-                                    <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
-                                    <p>Welcome: @Html.Encode(User.Identity.Name)</p>
-                                }
-                                else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
-                                {
-                                    <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Odjava", "LogOut", "Home")</li>
-                                    <p>Dobrodošel: @Html.Encode(User.Identity.Name)</p>
-                                }
-                            }
-                        }  
-                    }
-                
-                </ul>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/DateTimePicker.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.simplemodal-1.4.4.js"></script>
+    <script type="text/javascript" src="~/Scripts/timepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (document.cookie != "") {
+                $(".status").hide();
+                var linkId = document.cookie;
+                $("." + linkId).show();
             }
-        </div>
+            $(".my-link").on("click", function () {
+                $(".status").hide();
+                var linkId = $(this).data("id");
+                document.cookie = linkId;
+                $("." + linkId).show();
+            });
+        });
+    </script>
+    <link type='text/css' href='~/Content/basic.css' rel='stylesheet' media='screen' />
+    <link type='text/css' href='~/Content/basic_ie.css' rel='stylesheet' media='screen' />
 
-        <div id="body">
-            @RenderBody()
-            @*@Scripts.Render("~/bundles/jquery")*@
-            @*@RenderSection("scripts", required: false)*@
-        </div>
+</head>
 
-        <div id="footer">
-            <a href="http://www.actual-it.si/">www.actual-it.si</a>
-        </div>
+<div id="containter">
+    <div id="cssmenu">
+        @if (Request.IsAuthenticated)
+        {  
+            <ul>
+                <b>Message Viewer v1.0 </b>
+                @{
+                    string userName = System.Web.HttpContext.Current.User.Identity.Name;
+                    using (var dbUs = new userDbEntities())
+                    {
+                        var currentUser = dbUs.UsersTables.FirstOrDefault(u => u.username == userName);
+                        if (currentUser != null)
+                        {
 
+                            if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Administrator)
+                            {
+                            <li class="@Html.ActivePage("LoginAdmin", "AdminIndex")">@Html.ActionLink("View results", "AdminIndex", "LoginAdmin")</li>
+                            <li class="@Html.ActivePage("LoginAdmin", "Registracija")">@Html.ActionLink("Edit user", "Registracija", "LoginAdmin")</li>
+                            <li class="@Html.ActivePage("LoginAdmin", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginAdmin")</li>
+                            <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
+                            <p>Welcome: @Html.Encode(User.Identity.Name)</p>
+                            }
+                            else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
+                            {
+                            <li class="@Html.ActivePage("LoginUser", "Index")">@Html.ActionLink("View results", "Index", "LoginUser")</li>
+                            <li class="@Html.ActivePage("LoginUser", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginUser")</li>
+                            <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
+                            <p>Welcome: @Html.Encode(User.Identity.Name)</p>
+                            }
+                            else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
+                            {
+                                <li class="@Html.ActivePage("Home", "LogOut")">
+                                    <div class="status lnk1">@Html.ActionLink("Odjava", "LogOut", "Home")</div>
+                                    <div class="status lnk2">@Html.ActionLink("Logout", "LogOut", "Home")</div>
+                                </li>
+                            <label class="prevod">
+                                <a class="my-link" data-id="lnk1" href="#">Slo</a> /
+                                <a class="my-link" data-id="lnk2" href="#">Eng</a>
+                            </label>
+                            <label class="pozdravno-okno">
+                                <div class="status lnk1">Dobrodošel: @Html.Encode(User.Identity.Name)</div>
+                                <div class="status lnk2">Welcome: @Html.Encode(User.Identity.Name)</div>
+                            </label> 
+                            }
+                        }
+                    }  
+                }
+            </ul>
+        }
     </div>
+
+    <div id="body">
+        @RenderBody()
+        @*@Scripts.Render("~/bundles/jquery")*@
+        @*@RenderSection("scripts", required: false)*@
+    </div>
+
+    <div id="footer">
+        <a href="http://www.actual-it.si/">www.actual-it.si</a>
+    </div>
+
+</div>
 
 </html>
