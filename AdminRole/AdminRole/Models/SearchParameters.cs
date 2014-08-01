@@ -35,7 +35,6 @@ namespace AdminRole.Models
         public DateTime? Date { get; set; }
         public DateTime? Date2 { get; set; }
         public string Reference { get; set; }
-        //public string Exchangetimestamp { get; set;  }
         public DateTime? Exchangetimestamp { get; set; }
         public DateTime? Exchangetimestamp2 { get; set; }
         public string MsgS { get; set; }

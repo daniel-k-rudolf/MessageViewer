@@ -1,129 +1,130 @@
 ﻿@using AdminRole.Models
 @model AdminRole.Models.UserModel 
-@* Uporabi UsersModel v edit *@
+
 @{
-    ViewBag.Title = "Message Viewer";
     Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
 }
 
 @using (Html.BeginForm("CreateNew", "LoginAdmin", FormMethod.Post, new {id = "user-form"}))
-{
-    @Html.AntiForgeryToken()
- 
-    <div class="prijavno-okno_create">
-        <fieldset>
-            <legend>Create New User</legend>
-            @Html.HiddenFor(o => o.User.userID)
-            <label>Username</label>
-            <div class="editor-label">
-                @Html.TextBoxFor(u => u.User.username) 
-                @Html.ValidationMessageFor(u => u.User.username)
-            </div>
-            
-            <label>Password</label>
-            <div class="editor-label">
-                @Html.PasswordFor(u => u.User.password)
-                @Html.ValidationMessageFor(u => u.User.password)
-            </div>
-            
-            <label>Time Zone</label>
-            <div class="editor-label">
-                @Html.DropDownListFor(o => o.User.TimeZoneId, TimeZoneInfo.GetSystemTimeZones().Select(o => new SelectListItem{Text = o.DisplayName, Value = o.Id}))
-                @Html.ValidationMessageFor(u => u.User.TimeZoneId)
-            </div>
-            
-            <label>User Role</label>
-            <div class="editor-label">
-                @Html.DropDownList("VlogaNaziv", ((SelectList) ViewBag.DropListVloge).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.SelectedVloga)}), Model.VlogaNaziv)
-            </div>
+    {
+        @Html.AntiForgeryToken()
+        <div class="container top">
 
-            <label>Customer</label>
-            <div class="editor-label">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="page-header"><h2>Create users</h2></div>
+				
+				<div role="form" class="delete-users">
+				    <div class="form-group">
+				        @Html.HiddenFor(o => o.User.userID)
+				        <label for="us">Username</label>
+				        @Html.TextBoxFor(u => u.User.username, new{@class="form-control", id="us", placeholder=""})
+				        @Html.ValidationMessageFor(u => u.User.username) 
+				    </div>
+				    <div class="form-group">
+				        <label>Password</label>
+				        @Html.PasswordFor(u => u.User.password, new{@class="form-control", id="us", placeholder=""})
+				        @Html.ValidationMessageFor(u => u.User.password) 
+				    </div>
+				    <div class="form-group">
+				        <label>Time Zone</label>
+                        @Html.DropDownListFor(o => o.User.TimeZoneId, TimeZoneInfo.GetSystemTimeZones().Select(o => new SelectListItem{Text = o.DisplayName, Value = o.Id}), new{@class="form-control", id="us", placeholder=""})
+                        @Html.ValidationMessageFor(u => u.User.TimeZoneId)
+				    </div>
+				    <div class="form-group">
+				        <label>User Role</label>
+				        @Html.DropDownList("VlogaNaziv", ((SelectList) ViewBag.DropListVloge).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.SelectedVloga)}), Model.VlogaNaziv, new{@class="form-control", id="us"})
+				    </div>
 
-            </div>
-            <button class="add-custom">Add Customer</button>
-            <table class="custommers-tabela">
-                <thead>
-                    <th>Customers</th>
-                </thead>
-                <tbody>
-                    @for (var i=0; i < Model.User.CustomerTables.Count; i++)
-                    {
-                        <tr>
-                            <td width="85%">
-                                @Html.DropDownListFor(o => o.User.CustomerTables[i].CustomType.Id_NewCustomerType, Model.GetCustomTypes(Model.User.CustomerTables[i].CustomType.Id_NewCustomerType), "-- Select --")
-                            </td>
-                            <td width="10%">
+				    <div class="row customers">
+				        <label class="col-sm-2">Customers</label>
+                        <div class="col-sm-8">
+				        @for (var i = 0; i < Model.User.CustomerTables.Count; i++)
+                        {                    
+				            <div class="ud">
+                                @Html.DropDownListFor(o => o.User.CustomerTables[i].CustomType.Id_NewCustomerType, Model.GetCustomTypes(Model.User.CustomerTables[i].CustomType.Id_NewCustomerType), "Select", new {@class="form-control pull-left"})
                                 @Html.HiddenFor(o => o.User.CustomerTables[i].CustomerID)
                                 @Html.HiddenFor(o => o.User.CustomerTables[i].UserId)
                                 @Html.HiddenFor(o => o.User.CustomerTables[i].Customer)
-                                <input class="delete-custom" type="image" src="~/Content/images/delete2.png" data-id="@i"/>
-                            </td>
-                        </tr>
-                    }   
-                </tbody>
-            </table>
-            <p>To delete Customer click on <img src="~/Content/images/delete2.png"/> button.</p>
-            <div>
-             <input class="gumb_create" type="submit" name="action" value="Create New User"/>
-            <input class="gumb_back_to-edit2" type="button" value="Back to Edit Menu" onclick="RedirectToEdit()"/> 
-            <script type="text/javascript">
-                function RedirectToEdit() {
-                    var url = "@Url.Action("Registracija")";
-                    location.href = url;
-                }
-            </script>
-            </div>
+				                <button type="button" class="btn btn-danger pull-left delete-custom" data-id="@i">X</button>
+				            </div>					
+                        }
+                        </div>  
+                        				        
+				    </div>
+				  <div class="clearfix"></div>
+				  <div class="form-group">
+					<label>Customer</label>
+					<button type="button" class="add-custom btn btn-success">Add Customer</button>
+				  </div>
+				  <div class="clearfix"></div><br />
+				    <button type="submit" class="btn btn-default pull-left btn-primary" name="action">Save changes</button>
+				    <button type="submit" class="btn btn-default pull-right btn-primary" onclick="RedirectToEdit()">Back to Edit Menu</button>
+				    <script type="text/javascript">
+    				    function RedirectToEdit() {
+    				        var url = "@Url.Action("Registracija")";
+    				        location.href = url;
+    				    }
+    				</script>
+				</div>
+				@Html.ValidationSummary(false)
+			</div>
+		</div>
+		
+		<div class="row">
+		
+			<div class="col-md-12">
+				<hr />
+				&copy; Actual I.T., d.d. 
+			</div>
+			
+		</div>
+		
+    </div><!-- /.container -->
+    }
 
-        </fieldset>
-        @Html.ValidationSummary(false)
-    </div>
-}
+<script type="text/javascript">
+    $(function () {
 
-<div>
-    <script type="text/javascript">
-        $(function() {
+        $('.add-custom').on('click', function (e) {
+            e.preventDefault();
+            var form = $('#user-form').serialize();
+            form += "&act=addcustom";
 
-            $('.add-custom').on('click', function(e) {
-                e.preventDefault();
-                var form = $('#user-form').serialize();
-                form += "&act=addcustom";
-
-                $.post('/LoginAdmin/CreateNew', form, function(data) {
-                    $('#user-form').replaceWith(data);
-                });
-            });
-
-            $('.delete-custom').on('click', function (e) {
-                e.preventDefault();
-                var form = $('#user-form').serialize();
-                form += "&act=deletecustom&idx=" + $(this).data('id');
-
-                $.post('/LoginAdmin/CreateNew', form, function (data) {
-                    $('#user-form').replaceWith(data);
-                });
-            });
-
-            $("#user-form").submit(function (e) {
-                e.preventDefault();
-                var form = $('#user-form').serialize();
-                form += "&act=save";
-                $.post('/LoginAdmin/CreateNew', form, function (data) {
-                    if (data == "success")
-                        Redirect();
-                    else
-                        $('#user-form').replaceWith(data);
-                });
+            $.post('/LoginAdmin/CreateNew', form, function (data) {
+                $('#user-form').replaceWith(data);
             });
         });
 
-        function Redirect() {
-            var url = "@Url.Action("Registracija")";
-            location.href = url;
-        }
+        $('.delete-custom').on('click', function (e) {
+            e.preventDefault();
+            var form = $('#user-form').serialize();
+            form += "&act=deletecustom&idx=" + $(this).data('id');
 
-    </script>
+            $.post('/LoginAdmin/CreateNew', form, function (data) {
+                $('#user-form').replaceWith(data);
+            });
+        });
 
-</div>
+        $("#user-form").submit(function (e) {
+            e.preventDefault();
+            var form = $('#user-form').serialize();
+            form += "&act=save";
+            $.post('/LoginAdmin/CreateNew', form, function (data) {
+                if (data == "success")
+                    Redirect();
+                else
+                    $('#user-form').replaceWith(data);
+            });
+        });
+    });
+
+    function Redirect() {
+        var url = "@Url.Action("Registracija")";
+        location.href = url;
+    }
+
+</script>
+
 
 

@@ -11,71 +11,95 @@
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-        <div class="search_field">
-            Find message type:
-            <br/>
-            @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new {@style = "width: 200px;"})
-            <input class="gumbSearch" type="submit" value="Search"/>
-            
-            <input class="gumb_create_new3" type="button" value="Add New Message Type" onclick="Redirect()"/> 
-            <script type="text/javascript">
-                function Redirect() {
-                    var url = "@Url.Action("CreateNewMessageType")";
-                    location.href = url;
-                }
-            </script>
-            
-            <input class="gumb_back_to-edit" type="button" value="Back to Veiw" onclick="RedirectToEdit()"/> 
-            <script type="text/javascript">
-                function RedirectToEdit() {
-                    var url = "@Url.Action("AdminIndex")";
-                    location.href = url;
-                }
-            </script>
+        
+        <section class="header">
+            <div class="container top">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav class="navbar">
+                            <div class="container-fluid">
+                                <!-- Collect the nav links, forms, and other content for toggling -->
+                                <div>
+                                    <div class="navbar-left">
+                                        <p class="navbar-text">Find message type:</p>
+                                        <div class="navbar-form navbar-left" role="search">
+                                            <div class="form-group">
+                                                @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class="form-cntrol" })		                                 
+                                            </div>
+                                            <input class="btn btn-primary" type="submit" value="Search"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="navbar-right">
+                                        
+                                        <input class="btn btn-primary" type="button" value="Add New Message Type" onclick="Redirect()"/> 
+                                        <script type="text/javascript">
+                                            function Redirect() {
+                                                var url = "@Url.Action("CreateNewMessageType")";
+                                                location.href = url;
+                                            }
+                                        </script>
+                                        
+                                        <input class="btn btn-info" type="button" value="Back to Edit" onclick="RedirectToEdit()"/> 
+                                        <script type="text/javascript">
+                                            function RedirectToEdit() {
+                                                var url = "@Url.Action("AdminIndex")";
+                                                location.href = url;
+                                            }
+                                        </script>
 
-        </div>
+                                    </div>
+                                </div><!-- /.navbar-collapse -->
+                            </div><!-- /.container-fluid -->
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        
     }
     
-    <div class="tabelaSolr">
-        <table class="dani-tabela">
+    <div class="container">                                      
+        <div class="template">
+        <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th>
-                        Id
-                    </th>
-                    <th>
-                        @Html.ActionLink("Message Types", "KraticeView", new {sortOrder = ViewBag.KratView, currentFilter = ViewBag.CurrentFilter})
-                    </th>
-                    <th>
-                        Slo. description
-                    </th>
-                    <th>
-                        Eng. description
-                    </th>
+                    <th>Id</th>
+                    <th>@Html.ActionLink("Message Types", "KraticeView", new {sortOrder = ViewBag.KratView, currentFilter = ViewBag.CurrentFilter})</th>
+                    <th>Slo. description</th>
+                    <th>Eng. description</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             @foreach (var use in Model)
             {
-                <tbody>
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => use.Id_K)</td>
-                        <td>@Html.DisplayFor(modelItem => use.Kratica)</td>
-                        <td>@Html.DisplayFor(modelItem => use.OpisSlo)</td>
-                        <td>@Html.DisplayFor(modelItem => use.OpisAng)</td>
-                        <td>
-                            @Html.ActionLink("Edit", "EditMessage", new { id=use.Id_K }) |
-                            @Html.ActionLink("Delete", "DeleteMessageType", new { id = use.Id_K }) 
-                        </td>
-                    </tr>
+            <tbody>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => use.Id_K)</td>
+                    <td>@Html.DisplayFor(modelItem => use.Kratica)</td>
+                    <td>@Html.DisplayFor(modelItem => use.OpisSlo)</td>
+                    <td>@Html.DisplayFor(modelItem => use.OpisAng)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditMessage", new { id=use.Id_K }) |
+                        @Html.ActionLink("Delete", "DeleteMessageType", new { id = use.Id_K }) 
+                    </td>
 
-                </tbody>
-            }
-        </table>
-    </div>
-    <br/>
-    <div class="pagerPosition">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-        @Html.PagedListPager(Model, pageKrat => Url.Action("KraticeView", new { pageKrat, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
-    </div>
+                </tr>                                            
+            </tbody>   
+            }                        
+	    </table>
+        </div>
+        
+        <div class="row">
+            @Html.PagedListPager(Model, pageKrat => Url.Action("KraticeView", new { pageKrat, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+        </div>
 
-</div>
+        <div class="row">
+        <div class="col-md-12">
+            <hr />
+            &copy; Actual I.T., d.d. 
+        </div>
+    </div>	
+
+    </div><!-- /.container -->

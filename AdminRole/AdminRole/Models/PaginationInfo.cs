@@ -33,7 +33,7 @@ namespace AdminRole.Models
 
         public int LastPage
         {
-            get { return (int) Math.Floor(((decimal) TotalItemCount - 1)/PageSize) +1; }
+            get { return (int)Math.Floor(((decimal)TotalItemCount - 1) / PageSize) + 1; }
         }
 
         public bool HasNextPage

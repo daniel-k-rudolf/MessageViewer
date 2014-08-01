@@ -8,40 +8,61 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-    <div class="prijavno-okno_create-customer">
-        <fieldset>
-            <legend>Create New Message Type</legend>
-            
-            <label>Message Type:</label>
-            <div class="editor-label">
-                @Html.TextBoxFor(u => u.Kratica )
-                @Html.ValidationMessageFor(u => u.Kratica)
-            </div>
-            
-            <label>Slo. description:</label>
-            <div class="editor-label">
-                @Html.TextBoxFor(u => u.OpisSlo, new {@style = "width: 350px;"} )
-            </div>
-            
-            <label>Eng. description:</label>
-            <div class="editor-label">
-                @Html.TextBoxFor(u => u.OpisAng, new {@style = "width: 350px;"} )
-            </div>
+        
+        <div class="container top">
 
-            <input class="gumb_create-customer" type="submit" value="Create New Message Type"/>
-            @Html.HiddenFor(model => model.Id_K)
-            <div>   
-                <input class="gumb_back_to-edit2" type="button" value="Back To Create Menu" onclick="Redirect()"/>
-                <script type="text/javascript">
-                    function Redirect() {
-                            var url = "@Url.Action("KraticeView")";
-                            location.href = url;
-                        }
-                </script>
-            </div> 
-        </fieldset>
-       @Html.ValidationSummary(false)
-    </div>
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">			  
+				<div class="page-header"><h2>Create New Customer Type</h2></div>
+				
+				<div role="form" class="delete-users">
+				   <div class="form-group">
+					   <label class="control-label" for="us">Customer Type</label>
+				       <div class="input-group">
+				           @Html.TextBoxFor(u => u.Kratica, new { @class = "form-control", id = "us" })
+				           @Html.HiddenFor(model => model.Kratica)
+				           <div class="input-group-addon">*</div>
+				       </div>
+                       
+                       <label class="control-label" for="us">Slo. description:</label>
+				       <div class="input-group">
+				           @Html.TextBoxFor(u => u.OpisSlo, new { @class = "form-control", id = "us" })
+				           <div class="input-group-addon">*</div>
+				       </div>
+                       
+                       <label class="control-label" for="us">Eng. description:</label>
+				       <div class="input-group">
+				           @Html.TextBoxFor(u => u.OpisAng, new { @class = "form-control", id = "us" })
+				           <div class="input-group-addon">*</div>
+				       </div>
+
+				   </div>
+					
+                           @Html.HiddenFor(model => model.Id_K)
+
+				    <div class="clearfix"></div><br />
+                    <input class="btn btn-default pull-left btn-success" type="submit" value="Create New Message Type"/>
+                    <input class="btn btn-default pull-right btn-primary" type="button" value="Back To Create Menu" onclick="Redirect()"/>
+				    <script type="text/javascript">
+				        function Redirect() {
+				            var url = "@Url.Action("KraticeView")";
+    				        location.href = url;
+    				    }
+    				</script>
+				</div>				
+			</div>
+		</div>
+		
+		<div class="row">
+		
+			<div class="col-md-12">
+				<hr />
+				&copy; Actual I.T., d.d. 
+			</div>
+			
+		</div>
+		
+        </div><!-- /.container -->
     
 }
 

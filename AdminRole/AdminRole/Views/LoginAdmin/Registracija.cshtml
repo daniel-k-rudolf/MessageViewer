@@ -1,81 +1,100 @@
 ﻿@model PagedList.IPagedList<AdminRole.Models.UsersTable>
 @using AdminRole.Models
 @using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"/>
 @{
-    ViewBag.Title = "Message Viewer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="center-table">
-
     @using (Html.BeginForm("Registracija", "LoginAdmin", FormMethod.Get))
     {
-           <div class="search_field">
-               Find user by username:
-               <br/> 
-               @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-               <input class="gumbSearch" type="submit" value="Search"/>
-               
-                <input class="gumb_create_new" type="button" value="Create New User" onclick="Redirect()"/>
-                   <script type="text/javascript">
-                       function Redirect() {
-                           var url = "@Url.Action("CreateNew")";
-                           location.href = url;
-                       }
-                   </script>
-               
-                 <input class="gumb_create_customer" type="button" value="View Customer Types" onclick="RedirectCreate()"/>
-                    <script type="text/javascript">
-                        function RedirectCreate() {
-                            var url = "@Url.Action("CustomerTypeView")";
-                            location.href = url;
-                        }
-                   </script>
-           </div> 
-         
+        <section class="header">
+	    <div class="container top">
+		    <div class="row">
+		        <div class="col-md-12">
+		            <nav class="navbar">
+		                <div class="container-fluid">
+		                    <!-- Collect the nav links, forms, and other content for toggling -->
+		                    <div>
+		                        <div class="navbar-left">
+		                            <p class="navbar-text">Find user by username:</p>
+		                            <div class="navbar-form navbar-left" role="search">
+		                                <div class="form-group">
+		                                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class="form-cntrol" })		                                 
+		                                </div>
+		                                <button type="submit" class="btn btn-primary">Search</button>
+		                            </div>
+		                        </div>
+
+		                        <div class="navbar-right">
+		                            <button type="button" class="btn btn-primary" onclick="Redirect()">Create New User</button>
+		                            <script type="text/javascript">
+                            		    function Redirect() {
+                            		        var url = "@Url.Action("CreateNew")";
+                            		        location.href = url;
+                            		    }
+                            		</script>
+
+		                            <button type="button" class="btn btn-info" onclick="RedirectCreate()">View Customer Types</button>
+		                            <script type="text/javascript">
+                            		    function RedirectCreate() {
+                            		        var url = "@Url.Action("CustomerTypeView")";
+                            		        location.href = url;
+                            		    }
+                            		</script>
+		                        </div>
+		                    </div><!-- /.navbar-collapse -->
+		                </div><!-- /.container-fluid -->
+		            </nav>
+		        </div>
+		    </div>
+	    </div>
+	    </section>
+        
     }
     
-    <div class="tabelaSolr">
-        <table class="dani-tabela">
+    <div class="container">                                      
+        <div class="template">
+        <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th>
-                        User ID
-                    </th>
-                    <th>
-                        @Html.ActionLink("Username", "Registracija", new {sortOrder = ViewBag.NameSortParm, currentFilter=ViewBag.CurrentFilter})
-                    </th>
-                    <th>
-                        Time Zone
-                    </th>
-                    <th>
-                        User Role
-                    </th>
+                    <th>User ID</th>
+                    <th>@Html.ActionLink("Username", "Registracija", new {sortOrder = ViewBag.NameSortParm, currentFilter=ViewBag.CurrentFilter})</th>
+                    <th>Time Zone</th>
+                    <th>User Role</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             @foreach (var use in Model)
             {
-                <tbody>
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => use.userID)</td>
-                        <td>@Html.DisplayFor(modelItem => use.username)</td>
-                        <td>@Html.DisplayFor(modelItem => use.TimeZoneId)</td>
-                        <td>
-                            @String.Join(",", new userDbEntities().VlogaUporabnikas.Where(rt => rt.Id_Vloga == use.Roles).Select(r => r.Naziv))
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit User Customers", "Edit", new { id=use.userID }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = use.userID }) 
-                        </td>
-                    </tr>
-                </tbody>
-            }
-        </table>
-        <br/>
-            <div class="pagerPosition">
-                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-                @Html.PagedListPager(Model, page => Url.Action("Registracija", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-            </div>
+            <tbody>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => use.userID)</td>
+                    <td>@Html.DisplayFor(modelItem => use.username)</td>
+                    <td>@Html.DisplayFor(modelItem => use.TimeZoneId)</td>
+                    <td>
+                        @String.Join(",", new userDbEntities().VlogaUporabnikas.Where(rt => rt.Id_Vloga == use.Roles).Select(r => r.Naziv))
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit User Customers", "Edit", new { id=use.userID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = use.userID }) 
+                    </td>
+                </tr>                                            
+            </tbody>   
+            }                        
+	    </table>
         </div>
-</div>
+        
+        <div class="row">
+            @Html.PagedListPager(Model, page => Url.Action("Registracija", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+        <div class="row">
+        <div class="col-md-12">
+            <hr />
+            &copy; Actual I.T., d.d. 
+        </div>
+    </div>	
+
+</div><!-- /.container -->
+
+

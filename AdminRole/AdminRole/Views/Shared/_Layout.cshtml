@@ -2,103 +2,159 @@
 @using AdminRole.Helpers
 @using AdminRole.HtmlHelpers
 @using AdminRole.Models
+@using System.Web.Mvc.Html
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
-    <link rel="icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/DateTimePicker.css")" rel="stylesheet" type="text/css" />
-    <script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
-    <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/jquery.simplemodal-1.4.4.js"></script>
-    <script type="text/javascript" src="~/Scripts/timepicker.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            if (document.cookie != "") {
-                $(".status").hide();
-                var linkId = document.cookie;
-                $("." + linkId).show();
-            }
-            $(".my-link").on("click", function () {
-                $(".status").hide();
-                var linkId = $(this).data("id");
-                document.cookie = linkId;
-                $("." + linkId).show();
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="shortcut icon" href="favicon.ico">
+
+        <title>Message Viewer</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="@Url.Content("~/Content/style.css")" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        
+        <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
+        <link rel="icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+
+        <link href="@Url.Content("~/Content/DateTimePicker.css")" rel="stylesheet" type="text/css" />
+        <script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
+        <script type="text/javascript" src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/timepicker.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('.datepicker').datetimepicker({
+                    showAnim: 'slideDown',
+                    dateFormat: 'yy-mm-dd'
+                });
             });
-        });
-    </script>
-    <link type='text/css' href='~/Content/basic.css' rel='stylesheet' media='screen' />
-    <link type='text/css' href='~/Content/basic_ie.css' rel='stylesheet' media='screen' />
+        </script>
 
-</head>
-
-<div id="containter">
-    <div id="cssmenu">
-        @if (Request.IsAuthenticated)
-        {  
-            <ul>
-                <b>Message Viewer v1.0 </b>
-                @{
-                    string userName = System.Web.HttpContext.Current.User.Identity.Name;
-                    using (var dbUs = new userDbEntities())
-                    {
-                        var currentUser = dbUs.UsersTables.FirstOrDefault(u => u.username == userName);
-                        if (currentUser != null)
-                        {
-
-                            if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Administrator)
-                            {
-                            <li class="@Html.ActivePage("LoginAdmin", "AdminIndex")">@Html.ActionLink("View results", "AdminIndex", "LoginAdmin")</li>
-                            <li class="@Html.ActivePage("LoginAdmin", "Registracija")">@Html.ActionLink("Edit user", "Registracija", "LoginAdmin")</li>
-                            <li class="@Html.ActivePage("LoginAdmin", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginAdmin")</li>
-                            <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
-                            <p>Welcome: @Html.Encode(User.Identity.Name)</p>
-                            }
-                            else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter)
-                            {
-                            <li class="@Html.ActivePage("LoginUser", "Index")">@Html.ActionLink("View results", "Index", "LoginUser")</li>
-                            <li class="@Html.ActivePage("LoginUser", "KraticeView")">@Html.ActionLink("Message Types", "KraticeView", "LoginUser")</li>
-                            <li class="@Html.ActivePage("Home", "LogOut")">@Html.ActionLink("Logout", "LogOut", "Home")</li>
-                            <p>Welcome: @Html.Encode(User.Identity.Name)</p>
-                            }
-                            else if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
-                            {
-                                <li class="@Html.ActivePage("Home", "LogOut")">
-                                    <div class="status lnk1">@Html.ActionLink("Odjava", "LogOut", "Home")</div>
-                                    <div class="status lnk2">@Html.ActionLink("Logout", "LogOut", "Home")</div>
-                                </li>
-                            <label class="prevod">
-                                <a class="my-link" data-id="lnk1" href="#">Slo</a> /
-                                <a class="my-link" data-id="lnk2" href="#">Eng</a>
-                            </label>
-                            <label class="pozdravno-okno">
-                                <div class="status lnk1">Dobrodošel: @Html.Encode(User.Identity.Name)</div>
-                                <div class="status lnk2">Welcome: @Html.Encode(User.Identity.Name)</div>
-                            </label> 
-                            }
+        <script type="text/javascript">
+            $(document).ready(function() {
+                //called when key is pressed in textbox
+                $(".quantity").keypress(function(e) {
+                    //if the letter is not digit then display error and don't type anything
+                    $(".quantity").attr("placeholder");
+                    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                        //display error message
+                        return false;
+                    }
+                });
+            });
+        </script>
+        
+@*        <script type="text/javascript">
+            $(document).ready(function () {
+                jQuery.validator.setDefaults({
+                    highlight: function (element, errorClass, validClass) {
+                        if (element.type === 'radio') {
+                            this.findByName(element.name).addClass(errorClass).removeClass(validClass);
+                        } else {
+                            $(element).addClass(errorClass).removeClass(validClass);
+                            $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
                         }
-                    }  
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        if (element.type === 'radio') {
+                            this.findByName(element.name).removeClass(errorClass).addClass(validClass);
+                        } else {
+                            $(element).removeClass(errorClass).addClass(validClass);
+                            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                        }
+                    }
+                });
+
+                $(function () {
+                    $("span.field-validation-valid, span.field-validation-error").addClass('help-block');
+                    $("div.form-group").has("span.field-validation-error").addClass('has-error');
+                    $("div.validation-summary-errors").has("li:visible").addClass("alert alert-block alert-danger");
+                });
+            });
+
+
+        </script>*@
+
+    </head>
+
+    <body class = "no-bg">
+            @if (Request.IsAuthenticated)
+            {
+                string userName = System.Web.HttpContext.Current.User.Identity.Name;
+                using (var dbUs = new userDbEntities())
+                {
+                    var currentUser = dbUs.UsersTables.FirstOrDefault(u => u.username == userName);
+                    if (currentUser != null)
+                    {
+                        if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Administrator || currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Spediter || currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.SpediterOsnovni)
+                        {
+                            <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                                <div class="container-fluid">
+                                    <!-- Brand and toggle get grouped for better mobile display -->
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-envelope"></span> Message Viewer</a>
+                                    </div>
+                                
+                                    <!-- Collect the nav links, forms, and other content for toggling -->
+                                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                        
+                                        @if (currentUser.VlogaUporabnika.Id_Vloga == VlogaEnum.Administrator)
+                                        {
+                                        <ul class="nav navbar-nav navbar-left">
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-home"></span> Menu<span class="caret"></span></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("AdminIndex", "LoginAdmin")">Solr Results</a></li>
+                                                    <li><a href="@Url.Action("Registracija", "LoginAdmin")">Edit Users</a></li>
+                                                    <li><a href="@Url.Action("KraticeView", "LoginAdmin")">Msg. Types</a></li>
+                                                </ul>
+                                            </li>
+
+                                        </ul>    
+                                        }
+                                        
+                                        <ul class="nav navbar-nav navbar-right">
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome: @Html.Encode(User.Identity.Name)<span class="caret"></span></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("LogOut", "Home")"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div><!-- /.navbar-collapse -->
+                                </div> <!-- /.container-fluid --> 
+                            </div>                  
+                        }
+                    }
                 }
-            </ul>
-        }
-    </div>
-
-    <div id="body">
+            }
+           
         @RenderBody()
-        @*@Scripts.Render("~/bundles/jquery")*@
-        @*@RenderSection("scripts", required: false)*@
-    </div>
 
-    <div id="footer">
-        <a href="http://www.actual-it.si/">www.actual-it.si</a>
-    </div>
-
-</div>
-
+    </body>
 </html>

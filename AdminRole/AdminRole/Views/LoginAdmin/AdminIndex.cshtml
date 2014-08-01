@@ -1,250 +1,224 @@
 ﻿@model AdminRole.Models.SpremenljivkeView
 
-@using System.Activities.Expressions
-@using System.Activities.Statements
-@using System.Data.Common.CommandTrees.ExpressionBuilder
-@using System.Security.AccessControl
-@using System.Web.Razor.Parser.SyntaxTree
-@using System.Web.Services.Discovery
-@using System.Web.UI.WebControls
-@using Microsoft.Ajax.Utilities
 @using AdminRole.Models
 @using AdminRole.Helpers
-@using System.Security.Policy
 @using System.Web.Mvc.Html
 
 @{
-    ViewBag.Title = "Message Viewer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script type="text/javascript">
-
-    $(function () {
-        $('.datepicker').datetimepicker({
-            showAnim: 'slideDown',
-            dateFormat: 'yy-mm-dd'
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".my-link").on("click", function () {
+                $(".status").hide();
+                var linkId = $(this).data("id");
+                $("." + linkId).show();
+            });
         });
-    });
+    </script>
 
-</script>
-
-<script type="text/javascript">
-
-    $(function () {
-        $(document).on('click', '.message-data', function (e) {
-            e.preventDefault();
-            jQuery.modal($(this).next().html());
-        });
-    });
-
-</script>
-
-<script type="text/javascript">
-    function ValidateNumber(e) {
-        var evt = (e) ? e : window.event;
-        var charCode = (evt.keyCode) ? evt.keyCode : evt.which;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
-        }
-        return true;
-    };
-</script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".my-link").on("click", function () {
-            $(".status").hide();
-            var linkId = $(this).data("id");
-            $("." + linkId).show();
-        });
-    });
-</script>
-
-<div class="center-table">
-        <div class="center-vrstice">
-        <form method="get" action="@Url.Action("AdminIndex")">
-        <div class="vrstica">
-            <label>Customer:</label>
-            <div class="editor-field">
-                @*@Html.TextBox("destination", Model.Search.Destination)*@
-                @Html.DropDownList("destination", ((SelectList) ViewBag.DropList).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = ( t.Text == ViewBag.Destination)}), "-- Select All --", Model.Search.Destination)
-            </div> 
-        </div>
-        <div class="vrstica">
-            <label>Order:</label>
-            <div class="editor-field">
-                @Html.TextBox("order", Model.Search.Order, new {onkeydown = "return ValidateNumber(event);"})
-            </div> 
-        </div>
-        <div class="vrstica">
-            <label>Internal:</label>
-            <div class="editor-field">
-                @Html.TextBox("internal", Model.Search.Internal, new {maxlength = 6, onkeydown = "return ValidateNumber(event);"})
-            </div> 
-        </div>
-        <div class="vrstica">
-            <label>Date From:</label>
-            <div class="editor-field">
-                @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker" })
-            
-            </div>
-        </div>
-            <div class="vrstica">
-                <label>Date To:</label>
-                <div class="editor-field">
-                    @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker" })
-                </div>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-            <div class="vrstica">
-                <label>Sequentialid:</label>
-                <div class="editor-field">
-                    @Html.TextBox("sequentialid", Model.Search.Sequ)
-                </div>
-            </div>
-            <div class="vrstica">
-                <label>Agent:</label>
-                <div class="editor-field">
-                    @Html.TextBox("agent", Model.Search.Agent)
-                </div>
-            </div>
-            <div class="vrstica">
-                <label>Voyage:</label>
-                <div class="editor-field">
-                    @Html.TextBox("voyage", Model.Search.Voyage)
-                </div>
-            </div>
-            <div class="vrstica">
-                <label>Vessel:</label>
-                <div class="editor-field">
-                    @Html.TextBox("vessel", Model.Search.Vessel)
-                </div>
-            </div>
-            <div class="vrstica">
-                <label>Msg. state:</label>
-                <div class="editor-field">
-                    @Html.TextBox("msg_state", Model.Search.MsgS)
-                </div>
-            </div>
-            <div class="vrstica">
-                <input class="first-search_btn" type="submit" value="Search"/> 
-            </div>
-        </form>    
-        </div>
-    
-        <div class="crta1"><hr/></div>
-
-        @* Tabela *@
-
-        <div class="tabelaSolr">
-            <table class="dani-tabela2">
-                <tr class="naslovi">
-                    <th>Internal</th>
-                    <th>Seq. ID</th>
-                    <th>Extid</th>
-                    <th>
-                        Msg. Type
-                        <a class="my-link" data-id="lnk1" href="#">Eng</a> /
-                        <a class="my-link" data-id="lnk2" href="#">Slo</a>
-                    </th>
-                    <th>Sender</th>
-                    <th>Dest</th>
-                    <th>Order</th>
-                    <th>Agent</th>
-                    <th>Vessel</th> 
-                    <th>Voyage</th>
-                    <th>Exchangetimestamp</th> 
-                    <th>Msg State</th> 
-                    <th>Details</th>
-                </tr> 
-                @foreach (var row in Model.Spremenljivke)
-                {
-                    <tr align="center" class="@((row.ExStat == 1) ? "error" : "")">
-                        <td>@row.Internal.First()</td>
-                        <td>@row.Sequ</td>
-                        <td>@row.ExtId</td>
-                        <td>
-                            <div class="status lnk1">@String.Join("", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisAng).FirstOrDefault() ?? row.MsgT.FirstOrDefault())</div>
-                            <div class="status lnk2">@String.Join("", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisSlo).FirstOrDefault() ?? row.MsgT.FirstOrDefault())</div>
-                        </td>
-                        <td>@row.Sender.First()</td>
-                        <td>@row.Destination.First()</td>
-                        <td>@row.Order.First()</td>
-                        <td>@row.Agent.First()</td>
-                        <td>@row.Vessel.First()</td>
-                        <td>@row.Voyage.First()</td>
-                        <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
-                        <td>@row.MsgS</td>                   
-                        <td>
-                            <a href class="message-data">View</a>
-                            <div style="display: none">
-                                <div style="display: block">
-                                    <h3>Detail View of Data</h3>
-                                
-                                    <p class="pscript">
-                                        Internal: <b>@Html.Raw(row.Internal.First())</b>
-                                    </p>
-
-                                    <p class="pscript">
-                                        Sequential Id: <b>@Html.Raw(row.Sequ)</b>, Mesage Type: <b>@Html.Raw(row.MsgT.First())</b>
-                                    </p>
-                                
-                                    <p class="pscript">
-                                        Sender: <b>@Html.Raw(row.Sender.First())</b>, Agent: <b>@Html.Raw(row.Agent.First())</b>, Destination: <b>@Html.Raw(row.Destination.First())</b> with Order: <b>@Html.Raw(row.Order.First())</b>
-                                    </p>
-                                
-                                    <p class="pscript">
-                                        Date: <b>@Html.Raw(row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset))</b>
-                                    </p>
-                                    
-                                    <p class="pscript">
-                                        Status: <b>@Html.Raw(row.MsgS)</b>
-                                    </p>
-
-                                    <p class="pscript">
-                                        Data information of message.
-                                    </p>
-                                    <div>
-                                        <code><pre>@Html.Raw(Html.Encode(row.Data))</pre></code>
+    @using (Html.BeginForm("AdminIndex", "LoginAdmin", FormMethod.Get))
+    {
+    <!-- /.Search menu -->
+    <section class="header">
+        <div class="container top">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav class="navbar">
+                        <div class="container-fluid">
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div>
+                                <p class="navbar-text">Stranka:</p>
+                                <div class="navbar-form navbar-left" role="search">
+                                    <div class="form-group">
+                                        @Html.DropDownList("destination", ((SelectList)ViewBag.DropList).Select(t => new SelectListItem() { Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.Destination) }), "-- Select All --", new { @class = "form-control" })
                                     </div>
                                 </div>
+                                <div class="navbar-right tcol">
+                                    <div class="navbar-form navbar-left" role="search">
+                                        <div class="form-group">
+                                            @Html.TextBox("order", Model.Search.Order, new { placeholder = "Order", id = "quantity1", @class = "quantity form-control" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.TextBox("internal", Model.Search.Internal, new { placeholder = "Internal", id = "quantity2", @class = "quantity form-control", maxlength = 6 })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker form-control", placeholder = "Date From" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker form-control", placeholder = "Date To" })
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-group">
+                                            @Html.TextBox("sequentialid", Model.Search.Sequ, new { placeholder = "Sequentialid", id = "quantity3", @class = "quantity form-control" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.TextBox("agent", Model.Search.Agent, new { placeholder = "Agent", @class = "form-control" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.TextBox("voyage", Model.Search.Voyage, new { placeholder = "Voyage", @class = "form-control" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.TextBox("vessel", Model.Search.Vessel, new { placeholder = "Vessel", @class = "form-control" })
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-group">
+                                            @Html.TextBox("msgtype", Model.Search.MsgT, new { placeholder = "Message Type", @class = "form-control" })
+                                        </div>
 
-                            </div>
-                        
-                        </td>
-                 
-                    </tr>
-                } 
-            </table> 
-
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </div>
+                                </div>
+                            </div><!-- /.navbar-collapse -->
+                        </div><!-- /.container-fluid -->
+                    </nav>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="resultPosition">
-        @{ Html.RenderPartial("Pagination", new PaginationInfo
-           {
-               PageUrl = Url.SetParameter("page", "!0"),
-               CurrentPage = Model.Search.PageIndex,
-               PageSize = Model.Search.PageSize,
-               TotalItemCount = Model.TotalCount,
-           }); }  
-        </div>
-        
-        <div class="pagesize">
-            Items per page:@{ var arr = new[] { 5, 10, 15, 20 };}
-            @for (var i = 0; i < arr.Length; i++)
-            {
-                if (arr[i] == Model.Search.PageSize)
+    <div class="container">                                      
+        <div class="template">
+        <table class="table table-bordered table-striped table-hover">
+		    <thead>
+			<tr>
+                <th>Internal</th>
+                <th>Seq. ID</th>
+                <th>Extid</th>
+                <th>Msg. Type</th>
+                <th>Sender</th>
+                <th>Dest</th>
+                <th>Order</th>
+                <th>Agent</th>
+                <th>Vessel</th> 
+                <th>Voyage</th>
+                <th>Exchangetimestamp</th> 
+                <th>Msg State</th> 
+                <th>Details</th>
+			</tr>
+		    </thead>
+            <tbody>
+                @if (Model.Spremenljivke != null)
                 {
-                    <span>@arr[i]</span> 
+                    foreach (var row in Model.Spremenljivke)
+                    {
+                        <tr>
+                            <td>@row.Internal.First()</td>
+                            <td>@row.Sequ</td>
+                            <td>@row.ExtId</td>
+                            <td>@String.Join("", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisAng).FirstOrDefault() ?? row.MsgT.FirstOrDefault())</td>
+                            <td>@row.Sender.First()</td>
+                            <td>@row.Destination.First()</td>
+                            <td>@row.Order.First()</td>
+                            <td>@row.Agent.First()</td>
+                            <td>@row.Vessel.First()</td>
+                            <td>@row.Voyage.First()</td>
+                            <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
+                            <td>@row.MsgS</td>
+                            <td>
+                                <a href="#" data-toggle="modal" data-target="#myModal">View</a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Detail View of Data</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div style="display: block">
+
+                                                    <p class="pscript">
+                                                        Internal: <b>@Html.Raw(row.Internal.First())</b>
+                                                    </p>
+
+                                                    <p class="pscript">
+                                                        Sequential Id: <b>@Html.Raw(row.Sequ)</b>, Mesage Type: <b>@Html.Raw(row.MsgT.First())</b>
+                                                    </p>
+
+                                                    <p class="pscript">
+                                                        Sender: <b>@Html.Raw(row.Sender.First())</b> Destination: <b>@Html.Raw(row.Destination.First())</b> with Order: <b>@Html.Raw(row.Order.First())</b>
+                                                    </p>
+
+                                                    <p class="pscript">
+                                                        Date: <b>@Html.Raw(row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset))</b>
+                                                    </p>
+
+                                                    <p class="pscript">
+                                                        Status: <b>@Html.Raw(row.MsgS)</b>
+                                                    </p>
+
+                                                    <p class="pscript">
+                                                        Data information of message.
+                                                    </p>
+                                                    <div>
+                                                        <code>
+                                                            <pre>@Html.Raw(Html.Encode(row.Data))</pre>
+                                                        </code>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>                      
+                        </tr>
+                    }
+                }                      
+            </tbody>
+		</table>
+        </div>
+		<div class="row">
+		    <div class="col-md-6">
+                @{ Html.RenderPartial("Pagination", new PaginationInfo
+                   {
+                       PageUrl = Url.SetParameter("page", "!0"),
+                       CurrentPage = Model.Search.PageIndex,
+                       PageSize = Model.Search.PageSize,
+                       TotalItemCount = Model.TotalCount,
+                   }); }
+		    </div>                               
+		    <div class="col-md-6">
+		        <ul class="pagination pull-right">
+		            @{int allItems = Model.TotalCount;}
+		            <li><a href="#">Items per page: </a></li>
+		            @{
+                if (allItems != 0)
+                {
+                    var arr = new[] { 5, 10, 20, 30, @allItems };
+                    for (var i = 0; i < arr.Length; i++)
+                    {
+                        if (arr[i] == Model.Search.PageSize)
+                        {
+                            if (i == arr.Length - 1)
+                            {<li><a href="#">&raquo;&raquo;</a></li>}
+                            else
+                            {<li><a href="#">@arr[i]</a></li>}
+                        }
+                        else
+                        {
+                            var linkText = (i < arr.Length - 1) ? arr[i].ToString() : ">>";
+		                        <li><a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@linkText</a></li>
+                        }
+                    }
                 }
                 else
                 {
-                    <a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@arr[i]</a>
+		                    <li><a href="#">--</a></li>
                 }
-                @Html.Raw((i == (arr.Length - 1) ? "" : "|")) 
-            }
-        </div>  
-    </div>
+		            }
+		        </ul>
+		    </div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<hr />
+				&copy; Actual I.T., d.d. 
+			</div>
+		</div>	
+    </div><!-- /.container -->
+    }

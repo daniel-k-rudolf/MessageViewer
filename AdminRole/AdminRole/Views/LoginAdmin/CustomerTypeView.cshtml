@@ -1,73 +1,88 @@
 ﻿@model PagedList.IPagedList<AdminRole.Models.CustomType>
+@using AdminRole.Models
 @using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"/>
+
 @{
-    ViewBag.Title = "Message Viewer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="center-table">
-
         @using (Html.BeginForm("CustomerTypeView", "LoginAdmin", FormMethod.Get))
         {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-            <div class="search_field">
-                Find destination type by name: 
-                <br/>
-                @Html.TextBox("searchStringCust", ViewBag.CurrentFilterCustomer as string, new {@style = "width: 200px;"})
-                <input class="gumbSearch" type="submit" value="Search"/>
+            @Html.AntiForgeryToken()          
             
-            
-            <input class="gumb_create_new3" type="button" value="Add New Customer Type" onclick="Redirect()"/> 
-            <script type="text/javascript">
-                function Redirect() {
-                    var url = "@Url.Action("CreateNewCustomerType")";
-                    location.href = url;
-                }
-            </script>
-            
-            <input class="gumb_back_to-edit" type="button" value="Back to Edit Menu" onclick="RedirectToEdit()"/> 
-            <script type="text/javascript">
-                function RedirectToEdit() {
-                var url = "@Url.Action("Registracija")";
-                location.href = url;
-                }
-            </script>
-    
-            </div>
+            <section class="header">
+                <div class="container top">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav class="navbar">
+                                <div class="container-fluid">
+                                    <!-- Collect the nav links, forms, and other content for toggling -->
+                                    <div>
+                                        <div class="navbar-left">
+                                            <p class="navbar-text">Find customer:</p>
+                                            <div class="navbar-form navbar-left" role="search">
+                                                <div class="form-group">
+                                                    @Html.TextBox("searchStringCust", ViewBag.CurrentFilter as string, new { @class="form-cntrol" })		                                 
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Search</button>
+                                            </div>
+                                        </div>
 
-            
+                                        <div class="navbar-right">
+                                            <button type="button" class="btn btn-primary" onclick="Redirect()">Add New Customer Type</button>
+                                            <script type="text/javascript">
+                                                function Redirect() {
+                                                    var url = "@Url.Action("CreateNewCustomerType")";
+                                                    location.href = url;
+                                                }
+                                            </script>
+
+                                            <button type="button" class="btn btn-info" onclick="RedirectToEdit()">Back to Edit Menu</button>
+                                            <script type="text/javascript">
+                                                function RedirectToEdit() {
+                                                    var url = "@Url.Action("Registracija")";
+                                                    location.href = url;
+                                                }
+                                            </script>
+                                        </div>
+                                    </div><!-- /.navbar-collapse -->
+                                </div><!-- /.container-fluid -->
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </section>
+                               
          }
 
-            <div class="tabelaSolr">
-            <table class="dani-tabela">
-                <thead>
-                    <tr>
-                        <th>
-                            Customer Type ID
-                        </th>
-                        <th>
-                            Customer Type Name
-                            @*@Html.ActionLink("Customer Type", "CustomerTypeView", new {sortOrderCust = ViewBag.CustView, currentFilterCust=ViewBag.CurrentFilterCustomer})*@
-                        </th>
-                    </tr>
-                </thead>
-                @foreach (var use in Model)
-                {
-                    <tbody>
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => use.Id_NewCustomerType)</td>
-                            <td>@Html.DisplayFor(modelItem => use.CustomerType)</td>
-                            <td>@Html.ActionLink("Delete", "DeleteCustomerType", new { id = use.Id_NewCustomerType })</td>
-                        </tr>
-                    </tbody>
-                }
-            </table>
-        </div>
-        <br/>
-        <div class="pagerPosition">
-            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-            @Html.PagedListPager(Model, pageCust => Url.Action("CustomerTypeView", new { pageCust, sortOrderCust = ViewBag.CurrentSortCust, currentFilterCust = ViewBag.CurrentFilterCustomer }))
-        </div>  
-    @*</div>*@
-</div>
+            <div class="container">                                      
+                <div class="template">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Customer Type ID</th>
+                                <th>Customer Type Name</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        @foreach (var use in Model)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => use.Id_NewCustomerType)</td>
+                                    <td>@Html.DisplayFor(modelItem => use.CustomerType)</td>
+                                    <td>@Html.ActionLink("Delete", "DeleteCustomerType", new { id = use.Id_NewCustomerType })</td>
+                                </tr>                                           
+                            </tbody>   
+                        }                        
+                    </table>
+                </div>
+                <div class="row">
+                    @Html.PagedListPager(Model, pageCust => Url.Action("CustomerTypeView", new { pageCust, sortOrderCust = ViewBag.CurrentSortCust, currentFilterCust = ViewBag.CurrentFilterCustomer }))
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr />
+                        &copy; Actual I.T., d.d. 
+                    </div>
+                </div>
+            </div><!-- /.container -->

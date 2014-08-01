@@ -1,0 +1,156 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input.username {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input.password {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.tcol .navbar-form .form-group {
+  margin-bottom: 4px;
+}
+.logo {
+  margin: 100px 0 10px 0;
+}
+.no-bg {
+  background: none;
+}
+.navbar-inverse .navbar-nav>li>a,
+.navbar-inverse .navbar-brand {
+  color: #FFF;
+}
+.no-top {
+  margin-top: 0;
+}
+.top {
+  padding-top: 30px;
+}
+.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus, .navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus{
+  background: #6B6A6A;
+}
+.navbar-inverse .navbar-nav>li>a.no-link:hover {
+  background: none;
+}
+.navbar-form .form-group {
+  width: 178px;
+}
+.navbar {
+  margin-bottom: 10px;
+}
+hr {
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+.header {
+  background-color: #eee;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 991px) {
+.navbar-right {float: left!important;}
+}
+
+@media (max-width: 768px) {
+.navbar-text {margin: 0;}
+.navbar-form {margin-top: 0;}
+.navbar-inverse .navbar-text {margin: 15px;}
+}
+.delete-users {
+  margin-bottom: 30px;
+  display: inline-block;
+  width: 100%;
+}
+.delete-users label {
+  margin-right: 20px;
+}
+.customers {
+  margin-bottom: 10px;
+}
+.customers select {
+  width: 100px;
+}
+.ud {
+  display: inline-block;
+  width: 100%;
+}
+.ud .btn {
+  margin-left: 10px;
+}
+.warning {
+  padding: 10px;
+}
+.bs-callout-danger {
+  color: #d9534f;
+}
+
+li > .status:last-child {
+    display: none;
+}
+
+th > .status:last-child {
+    display: none;
+}
+
+.pscript {
+   display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {
+    color: #ff0000;
+}
+ 
+.field-validation-valid {
+    display: none;
+}
+ 
+.input-validation-error {
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+ 
+.validation-summary-errors {
+    font-weight: bold;
+    color: #ff0000;
+}
+ 
+.validation-summary-valid {
+    display: none;
+}

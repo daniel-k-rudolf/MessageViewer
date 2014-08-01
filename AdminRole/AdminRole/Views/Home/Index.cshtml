@@ -1,42 +1,38 @@
-﻿@model AdminRole.Models.Users
+﻿@using System.Activities.Statements
+@using System.Web.UI.WebControls
+@model AdminRole.Models.Users
 
-@{
-    ViewBag.Title = "Message Viewer";
-}
+<body>
 
-@*<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Solr-Actual</title>
-    <link rel="stylesheet" media="screen"/>
-</head>
+    <div class="container">
+          
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "form-signin" }))
+    {
+        <div class="text-center"><img src=@Url.Content("~/Content/images/logo.png") class="logo" alt=""></div>
+        <h4 class="form-signin-heading">Please sign in</h4>
+        <div class="control-group">
+            <div class="controls-inline">
+                @Html.TextBoxFor(u => u.Username, new {placeholder="Username", @class="form-control username"}) @Html.ValidationMessageFor(u => u.Username)
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">       
+                @Html.PasswordFor(u => u.Password, new {placeholder="Password", @class="form-control password"}) @Html.ValidationMessageFor(u=> u.Password)
+            </div>
+        </div>
+        
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    &copy; Actual I.T., d.d. 
+                </div>
+            </div>    
+    }
+		
+    </div> <!-- /container -->
 
-<body>*@
-
-@using (Html.BeginForm("Login", "Home"))
-{
-    
-    <div class="prijavno-okno">
-        <img src="/Content/images/logo123.png" class="slikaLogo" />
-        <fieldset>
-            <legend>Login</legend>
-            <form method="get">
-                <label>Username:</label>
-                @Html.TextBoxFor(u => u.Username)
-                @Html.ValidationMessageFor(u => u.Username)
-                <br/> 
-                <label>Password:</label>
-                @Html.PasswordFor(p => p.Password)
-                @Html.ValidationMessageFor(u => u.Password)
-                <br/>
-                <input class="gumb" type="submit" value="Login">
-            </form>
-        </fieldset>
-        @Html.ValidationSummary(false)
-    </div>  
-}
-@*</body>
-
-</html>*@
-
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+</body>

@@ -6,40 +6,36 @@
 @using AdminRole.Models
 @model AdminRole.Models.PaginationInfo
 
-<div>
-    <b>Results @Model.FirstItemIndex - @Model.LastItemIndex</b>
-</div>
+<ul class="pagination">
 
-<div class="pagination">
-
-@if (Model.HasPrevPage)
-{
-    <a href="@Model.PrevPageUrl">&laquo; Previous</a>
-}
-else
-{
-    <span class="disabledPage">&laquo; Previous</span>
-}
-
-@foreach (var p in Model.Pages)
-{
-    if (p == Model.CurrentPage)
+    @if (Model.HasPrevPage)
     {
-        <span class="currentPage">@p</span>
+        <li><a href="@Model.PrevPageUrl">&laquo;</a></li>
     }
     else
     {
-        <a href="@Model.PageUrlFor(p)">@p</a>
+        <li><a>&laquo;</a></li>
     }
-}
 
-@if (Model.HasNextPage)
-{
-    <a href="@Model.NextPageUrl">Next &raquo;</a>
-}
-else
-{
-    <span class="disabledPage">Next &raquo;</span>
-}
+    @foreach (var p in Model.Pages)
+    {
+        if (p == Model.CurrentPage)
+        {
+            <li class="active"><a>@p</a></li>
+        }
+        else
+        {
+            <li><a href="@Model.PageUrlFor(p)">@p</a></li>
+        }
+    }
+
+    @if (Model.HasNextPage)
+    {
+        <li><a href="@Model.NextPageUrl">&raquo;</a></li>
+    }
+    else
+    {
+        <li><a>&raquo;</a></li>
+    }
     
-</div>
+</ul>
