@@ -13,7 +13,7 @@ namespace AdminRole.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class userDbEntities : DbContext
+    public partial class userDbEntities : DbContext, IDisposable
     {
         public userDbEntities()
             : base("name=userDbEntities")
@@ -30,5 +30,6 @@ namespace AdminRole.Models
         public DbSet<CustomType> CustomTypes { get; set; }
         public DbSet<KraticeTable> KraticeTables { get; set; }
         public DbSet<VlogaUporabnika> VlogaUporabnikas { get; set; }
+
     }
 }

@@ -13,24 +13,24 @@
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">			  
-                <div class="page-header"><h2>User to delete</h2></div>
+                <div class="page-header"><h2>Izbriši uporabnika</h2></div>
 				
                 <div role="form" class="delete-users">
-                    <p class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Are you sure you want to delete this user?</p>
+                    <p class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Ali ste prepričani, da želite izbrisati tega uporabnika?</p>
                     <div class="form-group">
-                        <label for="us">User ID</label>
+                        <label for="us">Id uporabnika</label>
                         @Html.TextBoxFor(model => model.userID, new {disabled = "disabled", @readonly = "readonly", @class="form-control", id="us", placeholder=""})
                     </div>
                     <div class="form-group">
-                        <label for="us2">Username</label>
+                        <label for="us2">Uporabniško ime</label>
                         @Html.TextBoxFor(model => model.username, new {disabled = "disabled", @readonly = "readonly", @class="form-control", id="us", placeholder=""})
                     </div>
                     <div class="form-group">
-                        <label for="us3">Time Zone</label>
+                        <label for="us3">Časovna zona</label>
                         @Html.TextBoxFor(model => model.TimeZoneId, new {disabled = "disabled", @readonly = "readonly", @class="form-control", id="us", placeholder=""})
                     </div>
                     <div class="form-group">
-                        <label for="us3">User Role</label>
+                        <label for="us3">Vloga uporabnika</label>
                         @Html.TextBoxFor(model => model.Roles, new {disabled = "disabled", @readonly = "readonly", @class="form-control", id="us", placeholder=""})
                     </div>
 
@@ -40,11 +40,11 @@
 
                     <div class="clearfix"></div>
                     <div class="form-group">
-                        <p class="warning bg-warning"><strong>Note!</strong> By deleting user, you will also delete Customers for this user!</p>
+                        <p class="warning bg-warning"><strong>Obvestilo!</strong> Z izbrisom uporabnika boste tudi izbrisali njegove stranke!</p>
                     </div>
                     <div class="clearfix"></div><br />
-                    <input type="submit" class="btn btn-default pull-left btn-danger" name="action" value="Delete">
-				    <input type="button" class="btn btn-default pull-right btn-primary" onclick="RedirectToEdit()" value="Back to Edit Men">
+                    <input type="submit" class="btn btn-default pull-left btn-danger" name="action" value="Izbriši">
+				    <input type="button" class="btn btn-default pull-right btn-primary" onclick="RedirectToEdit()" value="Nazaj">
 				    <script type="text/javascript">
     				    function RedirectToEdit() {
     				        var url = "@Url.Action("Registracija")";

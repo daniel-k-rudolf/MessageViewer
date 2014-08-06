@@ -10,7 +10,7 @@ namespace AdminRole.Models
     {
         public int IdNewType { get; set; }
 
-        [Required(ErrorMessage = "Customer is required!")]
+        [Required(ErrorMessage = "Vnesite stranko!")]
         public string CustomType { get; set; }
 
     }

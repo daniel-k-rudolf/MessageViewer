@@ -21,18 +21,18 @@
                                 <!-- Collect the nav links, forms, and other content for toggling -->
                                 <div>
                                     <div class="navbar-left">
-                                        <p class="navbar-text">Find message type:</p>
+                                        <p class="navbar-text">Najdi sporočilo:</p>
                                         <div class="navbar-form navbar-left" role="search">
                                             <div class="form-group">
-                                                @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class="form-cntrol" })		                                 
+                                                @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class="form-control" })		                                 
                                             </div>
-                                            <input class="btn btn-primary" type="submit" value="Search"/>
+                                            <input class="btn btn-primary" type="submit" value="Išči..."/>
                                         </div>
                                     </div>
                                     
                                     <div class="navbar-right">
                                         
-                                        <input class="btn btn-primary" type="button" value="Add New Message Type" onclick="Redirect()"/> 
+                                        <input class="btn btn-primary" type="button" value="Dodaj sporočilo" onclick="Redirect()"/> 
                                         <script type="text/javascript">
                                             function Redirect() {
                                                 var url = "@Url.Action("CreateNewMessageType")";
@@ -40,7 +40,7 @@
                                             }
                                         </script>
                                         
-                                        <input class="btn btn-info" type="button" value="Back to Edit" onclick="RedirectToEdit()"/> 
+                                        <input class="btn btn-info" type="button" value="Nazaj na solr" onclick="RedirectToEdit()"/> 
                                         <script type="text/javascript">
                                             function RedirectToEdit() {
                                                 var url = "@Url.Action("AdminIndex")";
@@ -66,10 +66,10 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>@Html.ActionLink("Message Types", "KraticeView", new {sortOrder = ViewBag.KratView, currentFilter = ViewBag.CurrentFilter})</th>
-                    <th>Slo. description</th>
-                    <th>Eng. description</th>
-                    <th>Edit</th>
+                    <th>@Html.ActionLink("Sporočila", "KraticeView", new {sortOrder = ViewBag.KratView, currentFilter = ViewBag.CurrentFilter})</th>
+                    <th>Slo. opis</th>
+                    <th>Ang. opis</th>
+                    <th>Uredi</th>
                 </tr>
             </thead>
             @foreach (var use in Model)
@@ -81,8 +81,8 @@
                     <td>@Html.DisplayFor(modelItem => use.OpisSlo)</td>
                     <td>@Html.DisplayFor(modelItem => use.OpisAng)</td>
                     <td>
-                        @Html.ActionLink("Edit", "EditMessage", new { id=use.Id_K }) |
-                        @Html.ActionLink("Delete", "DeleteMessageType", new { id = use.Id_K }) 
+                        @Html.ActionLink("Uredi", "EditMessage", new { id=use.Id_K }) |
+                        @Html.ActionLink("Izbriši", "DeleteMessageType", new { id = use.Id_K }) 
                     </td>
 
                 </tr>                                            

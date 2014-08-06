@@ -1,4 +1,5 @@
-﻿@model AdminRole.Models.UserModel
+﻿@using System.Net.Http
+@model AdminRole.Models.UserModel
 
 @{
     Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
@@ -11,21 +12,21 @@
         
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="page-header"><h2>Edit users</h2></div>
+                <div class="page-header"><h2>Uredi uporabnika</h2></div>
                 <div role="form" class="delete-users">
                     <div class="form-group">
-                        <label for="us">Username</label>
+                        <label for="us">Uporabniško ime</label>
                         @Html.TextBoxFor(model => model.User.username, new {disabled = "disabled", @readonly = "readonly", @class="form-control", id="us", placeholder="" })
                     </div>
                     
                     <div class="form-group">
-                        <label>Time Zone</label>
+                        <label>Časovna zona</label>
                         @Html.DropDownListFor(o => o.User.TimeZoneId, TimeZoneInfo.GetSystemTimeZones().Select(o => new SelectListItem{Text = o.DisplayName, Value = o.Id}), new {@class="form-control"})
                         @Html.ValidationMessageFor(model => model.User.TimeZoneId)
                     </div>
                     
                     <div class="form-group">
-                        <label>User Role</label>
+                        <label>Vloga uporabnika</label>
                         @Html.DropDownList("VlogaNaziv", ((SelectList) ViewBag.DropListVloge).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.SelectedVloga)}), Model.VlogaNaziv, new {@class="form-control"})
                     </div>
 
@@ -35,15 +36,22 @@
                     @Html.HiddenFor(model => model.User.passwordSalt)
                     
                     <div class="row customers">
-                        <label class="col-sm-2">Customers</label>
+                        <label class="col-sm-2">Stranka</label>
                         <div class="col-sm-8">                            
                             @for (var i=0; i < Model.User.CustomerTables.Count; i++)
                             {
                                 <div class="ud">
-                                    @Html.DropDownListFor(o => o.User.CustomerTables[i].CustomType.Id_NewCustomerType, Model.GetCustomTypes(Model.User.CustomerTables[i].CustomType.Id_NewCustomerType), "Select", new {@class="form-control pull-left"})
-                                    @Html.HiddenFor(o => o.User.CustomerTables[i].CustomerID)
-                                    @Html.HiddenFor(o => o.User.CustomerTables[i].UserId)
-                                    @Html.HiddenFor(o => o.User.CustomerTables[i].Customer)
+                                    <select name="@Html.Raw("User.CustomerTables["+i+"].CustomType.Id_NewCustomerType")" class="form-control pull-left">
+                                        <option value="">Select</option>
+                                        @foreach (var opt in Model.CustomTypes)
+                                        {
+                                            <option value="@opt.Id_NewCustomerType" @Html.Raw(opt.Id_NewCustomerType == Model.User.CustomerTables[i].CustomType.Id_NewCustomerType ? "selected" : "")>@opt.CustomerType</option>
+                                        }
+
+                                    </select>
+                                    <input type="hidden" value="@Html.Raw(Model.User.CustomerTables[i].CustomerID)" name="@Html.Raw("User.CustomerTables["+i+"].CustomerID")"/>
+                                    <input type="hidden" value="@Html.Raw(Model.User.CustomerTables[i].UserId)" name="@Html.Raw("User.CustomerTables["+i+"].UserId")"/>
+                                    <input type="hidden" value="@Html.Raw(Model.User.CustomerTables[i].Customer)" name="@Html.Raw("User.CustomerTables["+i+"].Customer")"/>
                                     <button type="button" class="btn btn-danger pull-left delete-custom" data-id="@i">X</button>   
                                 </div>                                                                                           
                             }
@@ -51,12 +59,12 @@
                     </div> 
                     <div class="clearfix"></div> 
                     <div class="form-group">
-                        <label>Customer</label>
-                        <button class="btn btn-success add-custom">Add Customer</button>
+                        <label>Stranka</label>
+                        <button class="btn btn-success add-custom">Dodaj stranko</button>
                     </div>
                     <div class="clearfix"></div><br />
-                    <input class="btn btn-default pull-left btn-primary" type="submit" name="action" value="Save changes"/>
-                    <input class="btn btn-default pull-right btn-primary" type="button" value="Back to Edit Menu" onclick="RedirectToEdit()"/> 
+                    <input class="btn btn-default pull-left btn-primary" type="submit" name="action" value="Shrani spremembe"/>
+                    <input class="btn btn-default pull-right btn-primary" type="button" value="Nazaj" onclick="RedirectToEdit()"/> 
                     <script type="text/javascript">
                         function RedirectToEdit() {
                             var url = "@Url.Action("Registracija")";

@@ -13,36 +13,39 @@
 
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">			  
-				<div class="page-header"><h2>Create New Customer Type</h2></div>
+				<div class="page-header"><h2>Ustvari opis za sporočilo</h2></div>
 				
 				<div role="form" class="delete-users">
-				   <div class="form-group">
-					   <label class="control-label" for="us">Customer Type</label>
-				       <div class="input-group">
-				           @Html.TextBoxFor(u => u.Kratica, new { @class = "form-control", id = "us" })
-				           @Html.HiddenFor(model => model.Kratica)
-				           <div class="input-group-addon">*</div>
-				       </div>
+				    <div class="form-group">
+				        <label class="control-label" for="us">Stranka</label>
+				        <div class="input-group">
+				            @Html.TextBoxFor(u => u.Kratica, new { @class = "form-control", id = "us" })
+                            @Html.ValidationMessageFor(u => u.Kratica, null, new {@class="help-block pull-right"})
+				            @Html.HiddenFor(model => model.Kratica)
+				            <div class="input-group-addon">*</div>
+				        </div>
                        
-                       <label class="control-label" for="us">Slo. description:</label>
-				       <div class="input-group">
-				           @Html.TextBoxFor(u => u.OpisSlo, new { @class = "form-control", id = "us" })
-				           <div class="input-group-addon">*</div>
-				       </div>
+				        <label class="control-label" for="us">Slo. opis:</label>
+				        <div class="input-group">
+				            @Html.TextBoxFor(u => u.OpisSlo, new { @class = "form-control", id = "us" })
+                            @Html.ValidationMessageFor(u => u.OpisSlo, null, new {@class="help-block pull-right"})
+				            <div class="input-group-addon">*</div>
+				        </div>
                        
-                       <label class="control-label" for="us">Eng. description:</label>
-				       <div class="input-group">
-				           @Html.TextBoxFor(u => u.OpisAng, new { @class = "form-control", id = "us" })
-				           <div class="input-group-addon">*</div>
-				       </div>
+				        <label class="control-label" for="us">Ang. opis:</label>
+				        <div class="input-group">
+				            @Html.TextBoxFor(u => u.OpisAng, new { @class = "form-control", id = "us" })
+                            @Html.ValidationMessageFor(u => u.OpisAng, null, new {@class="help-block pull-right"})
+				            <div class="input-group-addon">*</div>
+				        </div>
 
-				   </div>
-					
-                           @Html.HiddenFor(model => model.Id_K)
+				    </div>
+                    
+                    @Html.HiddenFor(model => model.Id_K)				    
 
 				    <div class="clearfix"></div><br />
-                    <input class="btn btn-default pull-left btn-success" type="submit" value="Create New Message Type"/>
-                    <input class="btn btn-default pull-right btn-primary" type="button" value="Back To Create Menu" onclick="Redirect()"/>
+                    <input class="btn btn-default pull-left btn-success" type="submit" value="Ustvari opis"/>
+                    <input class="btn btn-default pull-right btn-primary" type="button" value="Nazaj" onclick="Redirect()"/>
 				    <script type="text/javascript">
 				        function Redirect() {
 				            var url = "@Url.Action("KraticeView")";

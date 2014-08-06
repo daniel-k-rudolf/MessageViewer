@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace AdminRole.Models
 {
     using System;
@@ -20,7 +22,9 @@ namespace AdminRole.Models
         }
     
         public int userID { get; set; }
+        [Required(ErrorMessage = "Uporabniško ime je zahtevano!")]
         public string username { get; set; }
+        [Required(ErrorMessage = "Geslo je zahtevno!")]
         public string password { get; set; }
         public int Roles { get; set; }
         public string TimeZoneId { get; set; }

@@ -318,13 +318,13 @@ namespace AdminRole.Controllers
                             var crypto = new SimpleCrypto.PBKDF2();
                             if (userModel.User.password == null)
                             {
-                                ModelState.AddModelError("Password", "You forgot to enter password for new user!");
+                                ModelState.AddModelError("Password", "");
                             }
                             else
                             {
                                 if (userModel.User.username == null)
                                 {
-                                    ModelState.AddModelError("Username", "You forgot to enter username for new user!");
+                                    ModelState.AddModelError("Username", "");
                                 }
                                 else
                                 {
@@ -346,7 +346,7 @@ namespace AdminRole.Controllers
                                     }
                                     else
                                     {
-                                        ModelState.AddModelError("Username", "This username already exists!");
+                                        ModelState.AddModelError("Username", "Ta uporabnik že obstaja!");
                                     }
                                 }
                             }
@@ -423,45 +423,52 @@ namespace AdminRole.Controllers
             }
         }
 
+        public ActionResult CreateNewCustomerType()
+        {
+            return View();
+        }
+
         //NI CUSTOMER AMPAK DESTIONATION - UPORABI ZA SOLR!!!
+        [HttpPost]
         public ActionResult CreateNewCustomerType(Models.CustomerType customerType)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 try
                 {
                     using (var dataC = new userDbEntities())
                     {
                         var sysCustomerType = dataC.CustomTypes.Create();
 
-                        if (sysCustomerType != null)
-                        {
-                            sysCustomerType.CustomerType = customerType.CustomType;
-
-                            var count = dataC.CustomTypes.Count(c => c.CustomerType == customerType.CustomType);
-                            if (count == 0)
+                            if (sysCustomerType != null)
                             {
-                                dataC.CustomTypes.Add(sysCustomerType);
-                                dataC.SaveChanges();
-                                return RedirectToAction("CustomerTypeView", "LoginAdmin");
+                                sysCustomerType.CustomerType = customerType.CustomType;
+
+                                var count = dataC.CustomTypes.Count(c => c.CustomerType == customerType.CustomType);
+                                if (count == 0)
+                                {
+                                    dataC.CustomTypes.Add(sysCustomerType);
+                                    dataC.SaveChanges();
+                                    return RedirectToAction("CustomerTypeView", "LoginAdmin");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("CustomType", "Ta stranka že obstaja!");
+                                    //return View(customerType);
+                                }
                             }
                             else
                             {
-                                ModelState.AddModelError("CustomType", "This Customer already exists!");
-                                //return View(customerType);
+                                ModelState.AddModelError("CustomType", "");
                             }
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("CustomType", "You forgot to enter customer type for new user!");
-                        }
+                     
                     }
                 }
                 catch (Exception ex)
                 {
                     string error = ex.Message;
                 }
-            }
+            //}
             return View(customerType);
         }
 
@@ -516,33 +523,6 @@ namespace AdminRole.Controllers
                         break;
                     case "deletecustom":
                         userModel.User.CustomerTables.RemoveAt(idx);
-                        foreach (var customer in userModel.User.CustomerTables)
-                        {
-                            customer.CustomType = dbContext.CustomTypes.Find(customer.CustomType.Id_NewCustomerType);
-                        }
-                        var dbUser1 = dbContext.UsersTables.Find(userModel.User.userID);
-                        dbUser1.TimeZoneId = userModel.User.TimeZoneId;
-                        foreach (var custom in userModel.User.CustomerTables)
-                        {
-                            if (custom.CustomerID == 0)
-                            {
-                                dbUser1.CustomerTables.Add(custom);
-                            }
-                        }
-                        foreach (var custom in dbUser1.CustomerTables.ToList())
-                        {
-                            var modelCustom =
-                                userModel.User.CustomerTables.FirstOrDefault(o => o.CustomerID == custom.CustomerID);
-                            if (modelCustom != null) //update it
-                            {
-                                custom.CustomType =
-                                    dbContext.CustomTypes.Find(modelCustom.CustomType.Id_NewCustomerType);
-                            }
-
-                            if (userModel.User.CustomerTables.All(o => o.CustomerID != custom.CustomerID))
-                                dbContext.Entry(custom).State = EntityState.Deleted;
-                        }
-                        dbContext.SaveChanges();
                         break;
                     case "save":
                         foreach (var customer in userModel.User.CustomerTables)
@@ -575,15 +555,14 @@ namespace AdminRole.Controllers
                         {
                             var modelCustom =
                                 userModel.User.CustomerTables.FirstOrDefault(o => o.CustomerID == custom.CustomerID);
-                            if (modelCustom != null && custom.CustomerID > 0)//update it
+                            if (modelCustom != null) //update it
                             {
                                 custom.CustomType =
                                     dbContext.CustomTypes.Find(modelCustom.CustomType.Id_NewCustomerType);
                             }
 
-
                             if (userModel.User.CustomerTables.All(o => o.CustomerID != custom.CustomerID))
-                                dbUser.CustomerTables.Remove(custom);
+                                dbContext.Entry(custom).State = EntityState.Deleted;
                         }
 
                         dbContext.SaveChanges();
@@ -712,10 +691,14 @@ namespace AdminRole.Controllers
             }
         }
 
+        public ActionResult CreateNewMessageType()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public ActionResult CreateNewMessageType(Models.KraticeTable messageType)
         {
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     using (var dataM = new userDbEntities())
@@ -737,13 +720,13 @@ namespace AdminRole.Controllers
                             }
                             else
                             {
-                                ModelState.AddModelError("Message Type", "This Message already exists!");
+                                ModelState.AddModelError("Message Type", "Opis za to sporočilo že obstaja!");
                                 //return View(customerType);
                             }
                         }
                         else
                         {
-                            ModelState.AddModelError("Message", "You forgot to enter Message type!");
+                            ModelState.AddModelError("Message", "");
                         }
                     }
                 }
@@ -751,7 +734,6 @@ namespace AdminRole.Controllers
                 {
                     string error = ex.Message;
                 }
-            }
             return View(messageType);
         }
 

@@ -16,17 +16,17 @@
 		                    <!-- Collect the nav links, forms, and other content for toggling -->
 		                    <div>
 		                        <div class="navbar-left">
-		                            <p class="navbar-text">Find user by username:</p>
+		                            <p class="navbar-text">Najdi uporabnika:</p>
 		                            <div class="navbar-form navbar-left" role="search">
 		                                <div class="form-group">
-		                                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class="form-cntrol" })		                                 
+		                                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class="form-control" })		                                 
 		                                </div>
-		                                <button type="submit" class="btn btn-primary">Search</button>
+		                                <button type="submit" class="btn btn-primary">Išči...</button>
 		                            </div>
 		                        </div>
 
 		                        <div class="navbar-right">
-		                            <button type="button" class="btn btn-primary" onclick="Redirect()">Create New User</button>
+		                            <button type="button" class="btn btn-primary" onclick="Redirect()">Novi uporabnik</button>
 		                            <script type="text/javascript">
                             		    function Redirect() {
                             		        var url = "@Url.Action("CreateNew")";
@@ -34,7 +34,7 @@
                             		    }
                             		</script>
 
-		                            <button type="button" class="btn btn-info" onclick="RedirectCreate()">View Customer Types</button>
+		                            <button type="button" class="btn btn-info" onclick="RedirectCreate()">Pregled strank</button>
 		                            <script type="text/javascript">
                             		    function RedirectCreate() {
                             		        var url = "@Url.Action("CustomerTypeView")";
@@ -57,11 +57,11 @@
         <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th>User ID</th>
-                    <th>@Html.ActionLink("Username", "Registracija", new {sortOrder = ViewBag.NameSortParm, currentFilter=ViewBag.CurrentFilter})</th>
-                    <th>Time Zone</th>
-                    <th>User Role</th>
-                    <th>Edit</th>
+                    <th>ID uporabnika</th>
+                    <th>@Html.ActionLink("Uporabniško ime", "Registracija", new {sortOrder = ViewBag.NameSortParm, currentFilter=ViewBag.CurrentFilter})</th>
+                    <th>Časovna zona</th>
+                    <th>Vloga uporabnika</th>
+                    <th>Uredi</th>
                 </tr>
             </thead>
             @foreach (var use in Model)
@@ -75,8 +75,8 @@
                         @String.Join(",", new userDbEntities().VlogaUporabnikas.Where(rt => rt.Id_Vloga == use.Roles).Select(r => r.Naziv))
                     </td>
                     <td>
-                        @Html.ActionLink("Edit User Customers", "Edit", new { id=use.userID }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = use.userID }) 
+                        @Html.ActionLink("Uredi uporabnika", "Edit", new { id=use.userID }) |
+                        @Html.ActionLink("Izbriši", "Delete", new { id = use.userID }) 
                     </td>
                 </tr>                                            
             </tbody>   

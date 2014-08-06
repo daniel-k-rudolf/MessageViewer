@@ -83,18 +83,18 @@ namespace AdminRole.Controllers
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Wrong username or password!");
+                                ModelState.AddModelError("", "");
                             }
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Wrong username or password!");
+                            ModelState.AddModelError("", "");
                         }
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Wrong username or password!");
+                    ModelState.AddModelError("", "");
                     //return View("Index", uporabnik);
                 }
             }

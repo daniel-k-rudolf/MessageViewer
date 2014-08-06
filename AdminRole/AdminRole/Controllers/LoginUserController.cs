@@ -230,51 +230,6 @@ namespace AdminRole.Controllers
                 .Where(c => !string.IsNullOrEmpty(c))
                     .ToArray());
         }
-
-        public ActionResult KraticeView(string sortOrder, string searchString, string currentFilter, int? pageKrat)
-        {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.Actice = true;
-            ViewBag.KratView = String.IsNullOrEmpty(sortOrder) ? "krat_desc" : "";
-
-            try
-            {
-                using (var dbKrat = new userDbEntities())
-                {
-                    if (searchString != null)
-                    {
-                        pageKrat = 1;
-                    }
-                    else
-                    {
-                        searchString = currentFilter;
-                    }
-
-                    ViewBag.CurrentFilter = searchString;
-                    var kraticeMsg = from k in dbKrat.KraticeTables select k;
-                    if (!String.IsNullOrEmpty(searchString))
-                    {
-                        kraticeMsg = kraticeMsg.Where(k => k.Kratica.ToUpper().Contains(searchString.ToUpper()));
-                    }
-                    switch (sortOrder)
-                    {
-                        case "krat_desc":
-                            kraticeMsg = kraticeMsg.OrderByDescending(k => k.Kratica);
-                            break;
-                        default:
-                            kraticeMsg = kraticeMsg.OrderBy(k => k.Id_K);
-                            break;
-                    }
-                    int pageSize = 10;
-                    int pageNumber = (pageKrat ?? 1);
-                    return View(kraticeMsg.ToPagedList(pageNumber, pageSize));
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
+ 
     }
 }

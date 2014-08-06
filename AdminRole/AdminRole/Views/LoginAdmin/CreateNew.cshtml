@@ -12,62 +12,69 @@
 
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				<div class="page-header"><h2>Create users</h2></div>
+				<div class="page-header"><h2>Ustvari uporabnika</h2></div>
 				
-				<div role="form" class="delete-users">
-				    <div class="form-group">
-				        @Html.HiddenFor(o => o.User.userID)
-				        <label for="us">Username</label>
-				        @Html.TextBoxFor(u => u.User.username, new{@class="form-control", id="us", placeholder=""})
-				        @Html.ValidationMessageFor(u => u.User.username) 
-				    </div>
-				    <div class="form-group">
-				        <label>Password</label>
-				        @Html.PasswordFor(u => u.User.password, new{@class="form-control", id="us", placeholder=""})
-				        @Html.ValidationMessageFor(u => u.User.password) 
-				    </div>
-				    <div class="form-group">
-				        <label>Time Zone</label>
-                        @Html.DropDownListFor(o => o.User.TimeZoneId, TimeZoneInfo.GetSystemTimeZones().Select(o => new SelectListItem{Text = o.DisplayName, Value = o.Id}), new{@class="form-control", id="us", placeholder=""})
-                        @Html.ValidationMessageFor(u => u.User.TimeZoneId)
-				    </div>
-				    <div class="form-group">
-				        <label>User Role</label>
-				        @Html.DropDownList("VlogaNaziv", ((SelectList) ViewBag.DropListVloge).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.SelectedVloga)}), Model.VlogaNaziv, new{@class="form-control", id="us"})
-				    </div>
+			    <div role="form" class="delete-users">
+			        <div class="form-group">
+			            @Html.HiddenFor(o => o.User.userID)
+			            <label for="us">Uporabniško ime</label>
+			            @Html.TextBoxFor(u => u.User.username, new{@class="form-control", id="us", placeholder=""})
+			            @Html.ValidationMessageFor(u => u.User.username, null, new {@class="help-block pull-right"}) 
+			        </div>
+			        <div class="form-group">
+			            <label>Geslo</label>
+			            @Html.PasswordFor(u => u.User.password, new{@class="form-control", id="us", placeholder=""})
+			            @Html.ValidationMessageFor(u => u.User.password, null, new {@class="help-block pull-right"}) 
+			        </div>
+			        <div class="form-group">
+			            <label>Časovna zona</label>
+			            @Html.DropDownListFor(o => o.User.TimeZoneId, TimeZoneInfo.GetSystemTimeZones().Select(o => new SelectListItem{Text = o.DisplayName, Value = o.Id}), new{@class="form-control", id="us", placeholder=""})
+			            @Html.ValidationMessageFor(u => u.User.TimeZoneId)
+			        </div>
+			        <div class="form-group">
+			            <label>Vloga uporanbnika</label>
+			            @Html.DropDownList("VlogaNaziv", ((SelectList) ViewBag.DropListVloge).Select(t => new SelectListItem(){Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.SelectedVloga)}), new{@class="form-control", id="us"})
+			        </div>
 
-				    <div class="row customers">
-				        <label class="col-sm-2">Customers</label>
-                        <div class="col-sm-8">
-				        @for (var i = 0; i < Model.User.CustomerTables.Count; i++)
-                        {                    
-				            <div class="ud">
-                                @Html.DropDownListFor(o => o.User.CustomerTables[i].CustomType.Id_NewCustomerType, Model.GetCustomTypes(Model.User.CustomerTables[i].CustomType.Id_NewCustomerType), "Select", new {@class="form-control pull-left"})
-                                @Html.HiddenFor(o => o.User.CustomerTables[i].CustomerID)
-                                @Html.HiddenFor(o => o.User.CustomerTables[i].UserId)
-                                @Html.HiddenFor(o => o.User.CustomerTables[i].Customer)
-				                <button type="button" class="btn btn-danger pull-left delete-custom" data-id="@i">X</button>
-				            </div>					
-                        }
-                        </div>  
+			        <div class="row customers">
+			            <label class="col-sm-2">Stranka</label>
+			            <div class="col-sm-8">
+			                @for (var i = 0; i < Model.User.CustomerTables.Count; i++)
+			                {                    
+			                    <div class="ud">
+                                    <select name="@Html.Raw("User.CustomerTables["+i+"].CustomType.Id_NewCustomerType")" class="form-control pull-left">
+                                        <option value="">Select</option>
+                                        @foreach (var opt in Model.CustomTypes)
+                                        {
+                                            <option value="@opt.Id_NewCustomerType" @Html.Raw(opt.Id_NewCustomerType == Model.User.CustomerTables[i].CustomType.Id_NewCustomerType ? "selected" : "")>@opt.CustomerType</option>
+                                        }
+
+                                    </select>
+                                    <input type="hidden" value="@Html.Raw(Model.User.CustomerTables[i].CustomerID)" name="@Html.Raw("User.CustomerTables["+i+"].CustomerID")"/>
+                                    <input type="hidden" value="@Html.Raw(Model.User.CustomerTables[i].UserId)" name="@Html.Raw("User.CustomerTables["+i+"].UserId")"/>
+                                    <input type="hidden" value="@Html.Raw(Model.User.CustomerTables[i].Customer)" name="@Html.Raw("User.CustomerTables["+i+"].Customer")"/>
+                                    <button type="button" class="btn btn-danger pull-left delete-custom" data-id="@i">X</button>
+			                    </div>					
+			                }
+			            </div>  
                         				        
-				    </div>
-				  <div class="clearfix"></div>
-				  <div class="form-group">
-					<label>Customer</label>
-					<button type="button" class="add-custom btn btn-success">Add Customer</button>
-				  </div>
-				  <div class="clearfix"></div><br />
-				    <button type="submit" class="btn btn-default pull-left btn-primary" name="action">Save changes</button>
-				    <button type="submit" class="btn btn-default pull-right btn-primary" onclick="RedirectToEdit()">Back to Edit Menu</button>
-				    <script type="text/javascript">
-    				    function RedirectToEdit() {
-    				        var url = "@Url.Action("Registracija")";
-    				        location.href = url;
-    				    }
-    				</script>
-				</div>
-				@Html.ValidationSummary(false)
+			        </div>
+			        <div class="clearfix"></div>
+			        <div class="form-group">
+			            <label>Stranka</label>
+			            <button type="button" class="add-custom btn btn-success">Dodaj stranko</button>
+			        </div>
+			        <div class="clearfix"></div><br />
+			        <button type="submit" class="btn btn-default pull-left btn-primary" name="action">Shrani</button>
+			        <button type="submit" class="btn btn-default pull-right btn-primary" onclick="RedirectToEdit()">Nazaj</button>
+			        <script type="text/javascript">
+        			    function RedirectToEdit() {
+        			        var url = "@Url.Action("Registracija")";
+        			        location.href = url;
+        			    }
+        			</script>
+			    </div>
+				<span>@Html.ValidationSummary(false, null, new{@class="alert alert-danger alert-dismissible", role="alert"})</span>
 			</div>
 		</div>
 		

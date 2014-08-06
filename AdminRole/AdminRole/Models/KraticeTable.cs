@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace AdminRole.Models
 {
     using System;
@@ -15,8 +17,11 @@ namespace AdminRole.Models
     public partial class KraticeTable
     {
         public int Id_K { get; set; }
+        [Required(ErrorMessage = "Vnesite kratico!")]
         public string Kratica { get; set; }
+        [Required(ErrorMessage = "Vnesite slo. opis!")]
         public string OpisSlo { get; set; }
+        [Required(ErrorMessage = "Vnesite ang. opis!")]
         public string OpisAng { get; set; }
     }
 }

@@ -33,24 +33,24 @@
                                                 <p class="navbar-text">Stranka:</p>
                                                 <div class="navbar-form navbar-left" role="search">
                                                     <div class="form-group">
-                                                        @Html.DropDownList("destination", ((SelectList)ViewBag.DropList).Select(t => new SelectListItem() {Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.Destination)}), "-- Select All --", new{@class="form-control"})
+                                                        @Html.DropDownList("destination", ((SelectList)ViewBag.DropList).Select(t => new SelectListItem() {Text = t.Text, Value = t.Text, Selected = (t.Text == ViewBag.Destination)}), "-- Izberi vse --", new{@class="form-control"})
                                                     </div>
                                                 </div>
                                                 <div class="navbar-right">
                                                     <div class="navbar-form navbar-left" role="search">
                                                         <div class="form-group">
-                                                            @Html.TextBox("order", Model.Search.Order, new { placeholder="Order", id ="quantity1", @class="quantity form-control"})
+                                                            @Html.TextBox("order", Model.Search.Order, new { placeholder="Luška št.", id ="quantity1", @class="quantity form-control"})
                                                         </div>
                                                         <div class="form-group">
-                                                            @Html.TextBox("internal", Model.Search.Internal, new { placeholder="Internal", id ="quantity2", @class="quantity form-control", maxlength = 6})
+                                                            @Html.TextBox("internal", Model.Search.Internal, new { placeholder="Interna št.", id ="quantity2", @class="quantity form-control", maxlength = 6})
                                                         </div>
                                                         <div class="form-group">
-                                                            @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker form-control", placeholder="Date From" })
+                                                            @Html.TextBox("exchangetimestamp", Model.Search.Exchangetimestamp, new { @class = "datepicker form-control", placeholder="Datum od" })
                                                         </div>
                                                         <div class="form-group">
-                                                            @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker form-control", placeholder="Date To" })
+                                                            @Html.TextBox("exchangetimestamp2", Model.Search.Exchangetimestamp2, new { @class = "datepicker form-control", placeholder="Datum do" })
                                                         </div>
-                                                        <button type="submit" class="btn btn-primary">Search</button>
+                                                        <button type="submit" class="btn btn-primary">Išči...</button>
                                                     </div>
                                                 </div>
                                             </div><!-- /.navbar-collapse -->
@@ -66,13 +66,13 @@
                         <table class="table table-bordered table-striped table-hover">
 		                    <thead>
 			                <tr>
-                                <th>Internal No.</th>
-                                <th>Message Type</th>
-                                <th>Sender</th>
-                                <th>Destination</th>
-                                <th>Order</th>
-                                <th>Exchange Time Stamp</th>
-                                <th>Details</th>
+                                <th>Interna št.</th>
+                                <th>Sporočilo</th>
+                                <th>Pošiljatelj</th>
+                                <th>Prejemnik</th>
+                                <th>Luška št.</th>
+                                <th>Datum dogodka</th>
+                                <th>Detajli</th>
 			                </tr>
 		                    </thead>
                             <tbody>
@@ -83,7 +83,7 @@
                                         <tr>
                                             <td>@row.Internal.First()</td>
                                             <td>
-                                                @String.Join("", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisAng).FirstOrDefault() ?? row.MsgT.FirstOrDefault())
+                                                @String.Join("", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisSlo).FirstOrDefault() ?? row.MsgT.FirstOrDefault())
                                             </td>
                                             <td>@row.Sender.First()</td>
                                             <td>@row.Destination.First()</td>
@@ -97,25 +97,25 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                                <h4 class="modal-title" id="myModalLabel">Detail View of Data</h4>
+                                                                <h4 class="modal-title" id="myModalLabel">Detajli</h4>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div style="display: block">
 
                                                                     <p class="pscript">
-                                                                        Internal: <b>@Html.Raw(row.Internal.First())</b>
+                                                                        Interna št.: <b>@Html.Raw(row.Internal.First())</b>
                                                                     </p>
 
                                                                     <p class="pscript">
-                                                                        Sequential Id: <b>@Html.Raw(row.Sequ)</b>, Mesage Type: <b>@Html.Raw(row.MsgT.First())</b>
+                                                                        Sekvenčni Id: <b>@Html.Raw(row.Sequ)</b>, Sporočilo: <b>@Html.Raw(row.MsgT.First())</b>
                                                                     </p>
 
                                                                     <p class="pscript">
-                                                                        Sender: <b>@Html.Raw(row.Sender.First())</b> Destination: <b>@Html.Raw(row.Destination.First())</b> with Order: <b>@Html.Raw(row.Order.First())</b>
+                                                                        Pošiljatelj: <b>@Html.Raw(row.Sender.First())</b> Prejemnik: <b>@Html.Raw(row.Destination.First())</b> z Luško št: <b>@Html.Raw(row.Order.First())</b>
                                                                     </p>
 
                                                                     <p class="pscript">
-                                                                        Date: <b>@Html.Raw(row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset))</b>
+                                                                        Datum: <b>@Html.Raw(row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset))</b>
                                                                     </p>
 
                                                                     <p class="pscript">
@@ -123,7 +123,7 @@
                                                                     </p>
 
                                                                     <p class="pscript">
-                                                                        Data information of message.
+                                                                        Podrobne informacije:
                                                                     </p>
                                                                     <div>
                                                                         <code>
@@ -133,7 +133,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Zapri</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -158,32 +158,29 @@
 		                    <div class="col-md-6">
 		                        <ul class="pagination pull-right">
 		                            @{int allItems = Model.TotalCount;}
-		                            <li><a href="#">Items per page: </a></li>
+		                            <li><a href="#">Zadetkov na stran: </a></li>
 		                            @{
-		                                if (allItems != 0)
-		                                {
-		                                    var arr = new[] {5, 10, 20, 30, @allItems};
-		                                    for (var i = 0; i < arr.Length; i++)
-		                                    {
-		                                        if (arr[i] == Model.Search.PageSize)
-		                                        {
-		                                            if (i == arr.Length - 1)
-		                                            {<li><a href="#">&raquo;&raquo;</a></li>}
-		                                            else 
-                                                    {<li><a href="#">@arr[i]</a></li>}
-		                                        }
-		                                        else
-		                                        {
-		                                        var linkText = (i < arr.Length - 1) ? arr[i].ToString() : ">>";
-		                                        <li><a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@linkText</a></li>
-		                                        }  
-		                                    }    
-		                                }
-		                                else
-		                                {
+                                        if (allItems != 0)
+                                        {
+                                            var arr = new[] { 5, 10, 20, 30 };
+                                            for (var i = 0; i < arr.Length; i++)
+                                            {
+                                                if (arr[i] == Model.Search.PageSize)
+                                                {
+                                                    <li><a href="#">@arr[i]</a></li>
+                                                }
+                                                else
+                                                {
+		                                            <li><a href="@Url.SetParameters(new { pagesize = arr[i], page = 1 })">@arr[i]</a></li>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
 		                                    <li><a href="#">--</a></li>
-		                                }
+                                        }
 		                            }
+
 		                        </ul>
 		                    </div>
 		                </div>
@@ -220,9 +217,9 @@
                                                     <p class="navbar-text">Interna številka:</p>
                                                     <div class="navbar-form navbar-left" role="search">
                                                         <div class="form-group">
-                                                            @Html.TextBox("internal", Model.Search.Internal, new { placeholder="Internal", id ="quantity2", @class="quantity form-control", maxlength = 6 })
+                                                            @Html.TextBox("internal", Model.Search.Internal, new { placeholder="Interna št.", id ="quantity2", @class="quantity form-control", maxlength = 6 })
                                                         </div>
-                                                        <button type="submit" class="btn btn-primary">Search</button>
+                                                        <button type="submit" class="btn btn-primary">Išči...</button>
                                                     </div>
                                                 </div>
                                             </div><!-- /.navbar-collapse -->
@@ -238,11 +235,11 @@
                     <table class="table table-bordered table-striped table-hover">
 		                <thead>
 			            <tr>
-			                <th>Event</th>
-			                <th>Sended disposition</th>
-			                <th>Order</th>
-			                <th>Disposition state</th>
-			                <th>Event date</th>
+			                <th>Dogodek</th>
+			                <th>Poslana dispozicija</th>
+			                <th>Luška št.</th>
+			                <th>Stanje dispozicije</th>
+			                <th>Datum dogodka</th>
 			            </tr>
 		                </thead>
                         <tbody>
@@ -255,7 +252,7 @@
                                         <td>@row.Exchangetimestamp.Add(Model.TimeZone.BaseUtcOffset)</td>
                                         <td>@row.Order.FirstOrDefault()</td>
                                         <td>
-                                            @String.Join(",", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisAng).FirstOrDefault() ?? row.MsgT.FirstOrDefault())
+                                            @String.Join(",", new userDbEntities().KraticeTables.Where(rt => rt.Kratica == row.MsgT.FirstOrDefault()).Select(r => r.OpisSlo).FirstOrDefault() ?? row.MsgT.FirstOrDefault())
                                         </td>
                                         <td>@row.Exchangetimestamp2.Add(Model.TimeZone.BaseUtcOffset)</td>                          
                                     </tr>
@@ -277,7 +274,7 @@
 		                <div class="col-md-6">
 		                    <ul class="pagination pull-right">
 		                        @{int allItems = Model.TotalCount;}
-		                        <li><a href="#">Items per page: </a></li>
+		                        <li><a href="#">Zadetkov na stran: </a></li>
 		                        @{
 		                            if (allItems != 0)
 		                            {

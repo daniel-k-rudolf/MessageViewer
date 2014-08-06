@@ -18,17 +18,17 @@
                                     <!-- Collect the nav links, forms, and other content for toggling -->
                                     <div>
                                         <div class="navbar-left">
-                                            <p class="navbar-text">Find customer:</p>
+                                            <p class="navbar-text">Najdi stranko:</p>
                                             <div class="navbar-form navbar-left" role="search">
                                                 <div class="form-group">
-                                                    @Html.TextBox("searchStringCust", ViewBag.CurrentFilter as string, new { @class="form-cntrol" })		                                 
+                                                    @Html.TextBox("searchStringCust", ViewBag.CurrentFilter as string, new { @class="form-control" })		                                 
                                                 </div>
-                                                <button type="submit" class="btn btn-primary">Search</button>
+                                                <button type="submit" class="btn btn-primary">Išči...</button>
                                             </div>
                                         </div>
 
                                         <div class="navbar-right">
-                                            <button type="button" class="btn btn-primary" onclick="Redirect()">Add New Customer Type</button>
+                                            <button type="button" class="btn btn-primary" onclick="Redirect()">Dodaj novo stranko</button>
                                             <script type="text/javascript">
                                                 function Redirect() {
                                                     var url = "@Url.Action("CreateNewCustomerType")";
@@ -36,7 +36,7 @@
                                                 }
                                             </script>
 
-                                            <button type="button" class="btn btn-info" onclick="RedirectToEdit()">Back to Edit Menu</button>
+                                            <button type="button" class="btn btn-info" onclick="RedirectToEdit()">Nazaj</button>
                                             <script type="text/javascript">
                                                 function RedirectToEdit() {
                                                     var url = "@Url.Action("Registracija")";
@@ -59,9 +59,9 @@
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Customer Type ID</th>
-                                <th>Customer Type Name</th>
-                                <th>Delete</th>
+                                <th>ID stranke</th>
+                                <th>Stranka</th>
+                                <th>Izbriši</th>
                             </tr>
                         </thead>
                         @foreach (var use in Model)
@@ -70,7 +70,7 @@
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => use.Id_NewCustomerType)</td>
                                     <td>@Html.DisplayFor(modelItem => use.CustomerType)</td>
-                                    <td>@Html.ActionLink("Delete", "DeleteCustomerType", new { id = use.Id_NewCustomerType })</td>
+                                    <td>@Html.ActionLink("Izbriši", "DeleteCustomerType", new { id = use.Id_NewCustomerType })</td>
                                 </tr>                                           
                             </tbody>   
                         }                        

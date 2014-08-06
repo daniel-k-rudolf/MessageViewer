@@ -1,4 +1,6 @@
-﻿@using System.Web.UI.WebControls
+﻿@using System.Security.Policy
+@using System.Web.Providers.Entities
+@using System.Web.UI.WebControls
 @using AdminRole.Helpers
 @using AdminRole.HtmlHelpers
 @using AdminRole.Models
@@ -63,37 +65,6 @@
             });
         </script>
         
-@*        <script type="text/javascript">
-            $(document).ready(function () {
-                jQuery.validator.setDefaults({
-                    highlight: function (element, errorClass, validClass) {
-                        if (element.type === 'radio') {
-                            this.findByName(element.name).addClass(errorClass).removeClass(validClass);
-                        } else {
-                            $(element).addClass(errorClass).removeClass(validClass);
-                            $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
-                        }
-                    },
-                    unhighlight: function (element, errorClass, validClass) {
-                        if (element.type === 'radio') {
-                            this.findByName(element.name).removeClass(errorClass).addClass(validClass);
-                        } else {
-                            $(element).removeClass(errorClass).addClass(validClass);
-                            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
-                        }
-                    }
-                });
-
-                $(function () {
-                    $("span.field-validation-valid, span.field-validation-error").addClass('help-block');
-                    $("div.form-group").has("span.field-validation-error").addClass('has-error');
-                    $("div.validation-summary-errors").has("li:visible").addClass("alert alert-block alert-danger");
-                });
-            });
-
-
-        </script>*@
-
     </head>
 
     <body class = "no-bg">
@@ -129,9 +100,9 @@
                                             <li class="dropdown">
                                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-home"></span> Menu<span class="caret"></span></a>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("AdminIndex", "LoginAdmin")">Solr Results</a></li>
-                                                    <li><a href="@Url.Action("Registracija", "LoginAdmin")">Edit Users</a></li>
-                                                    <li><a href="@Url.Action("KraticeView", "LoginAdmin")">Msg. Types</a></li>
+                                                    <li><a href="@Url.Action("AdminIndex", "LoginAdmin")">Solr rezultati</a></li>
+                                                    <li><a href="@Url.Action("Registracija", "LoginAdmin")">Uredi uporabnike</a></li>
+                                                    <li><a href="@Url.Action("KraticeView", "LoginAdmin")">Sporočila</a></li>
                                                 </ul>
                                             </li>
 
@@ -140,9 +111,10 @@
                                         
                                         <ul class="nav navbar-nav navbar-right">
                                             <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome: @Html.Encode(User.Identity.Name)<span class="caret"></span></a>
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dobrodošel: @Html.Encode(User.Identity.Name)<span class="caret"></span></a>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("LogOut", "Home")"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+                                     
+                                                    <li><a href="@Url.Action("LogOut", "Home")"><span class="glyphicon glyphicon-off"></span> Odjava</a></li>
                                                 </ul>
                                             </li>
                                         </ul>

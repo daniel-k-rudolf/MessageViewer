@@ -1,43 +1,54 @@
 ﻿@model AdminRole.Models.KraticeTable
 @{
-    ViewBag.Title = "Message Viewer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditMessage", "LoginAdmin", FormMethod.Post, new { id = "user-form" }))
 {
     @Html.AntiForgeryToken()
-    <div class="prijavno-okno_delete2">
-        <h3 class="deleteMessage">Edit Message Type</h3>
-        <fieldset>
-            <legend>Message Type to Edit</legend>
-            <label>Message Type</label>
-            <div class="editor-field">
-                @Html.TextBoxFor(model => model.Kratica)
-            </div>
-            <label>Slo. description</label>
-            <div class="editor-field">
-                @Html.TextBoxFor(model => model.OpisSlo, new {style="width: 350px;"})
-            </div>
-            <label>Eng. description</label>
-            <div class="editor-field">
-                @Html.TextBoxFor(model => model.OpisAng, new {style="width: 350px;"})
-            </div>
-            @Html.HiddenFor(model => model.Id_K)
-            <p>
-                <input class="gumb_delete" type="submit" value="Save Message Type"/>
-                <input class="gumb_back_to-edit2" type="button" value="Back to Customers" onclick="RedirectToDelete()"/>
-            </p>
-        </fieldset>
+    <div class="container top">
         
-    </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="page-header"><h2>Uredi sporočilo</h2></div>
+                <div role="form" class="delete-users">
+                    <div class="form-group">
+                        <label for="us">Sporočilo</label>
+                        @Html.TextBoxFor(model => model.Kratica, new {@class="form-control", id="us", placeholder="" })
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Slovenski opis: </label>
+                        @Html.TextBoxFor(model => model.OpisSlo, new {@class="form-control"})
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Angleški opis: </label>
+                        @Html.TextBoxFor(model => model.OpisAng, new {@class="form-control"})
+                    </div>
+
+                    @Html.HiddenFor(model => model.Id_K) 
+                    
+                    <div class="clearfix"></div><br />
+                    <input class="btn btn-default pull-left btn-primary" type="submit" name="action" value="Shrani spremembe"/>
+                    <input class="btn btn-default pull-right btn-primary" type="button" value="Nazaj" onclick="RedirectToEdit()"/>  
+                </div>               
+            </div>            
+        </div>
+        
+        <div class="row">		
+            <div class="col-md-12">
+                <hr />
+                &copy; Actual I.T., d.d. 
+            </div>			
+        </div>
+    </div><!-- /.container -->
+                        
 }
 
-<div>   
     <script type="text/javascript">
-        function RedirectToDelete() {
+        function RedirectToEdit() {
             var url = "@Url.Action("KraticeView")";
             location.href = url;
         }
     </script>
-</div>
