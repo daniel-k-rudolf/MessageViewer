@@ -98,7 +98,7 @@
             var form = $('#user-form').serialize();
             form += "&act=addcustom";
 
-            $.post('/LoginAdmin/CreateNew', form, function (data) {
+            $.post('@Url.Action("CreateNew", "LoginAdmin", new RouteValueDictionary(new Dictionary<string, object> { {"id", null} }))', form, function (data) {
                 $('#user-form').replaceWith(data);
             });
         });
@@ -108,7 +108,7 @@
             var form = $('#user-form').serialize();
             form += "&act=deletecustom&idx=" + $(this).data('id');
 
-            $.post('/LoginAdmin/CreateNew', form, function (data) {
+            $.post('@Url.Action("CreateNew", "LoginAdmin", new RouteValueDictionary(new Dictionary<string, object> { {"id", null} }))', form, function (data) {
                 $('#user-form').replaceWith(data);
             });
         });
@@ -117,7 +117,7 @@
             e.preventDefault();
             var form = $('#user-form').serialize();
             form += "&act=save";
-            $.post('/LoginAdmin/CreateNew', form, function (data) {
+            $.post('@Url.Action("CreateNew", "LoginAdmin", new RouteValueDictionary(new Dictionary<string, object> { {"id", null} }))', form, function (data) {
                 if (data == "success")
                     Redirect();
                 else

@@ -223,6 +223,57 @@ namespace AdminRole.Controllers
             }
         }
 
+        public ActionResult PopraviGeslo(int id = 0)
+        {
+            using (var dbPopGe = new userDbEntities())
+            {
+                var popGe = dbPopGe.UsersTables.Find(id);
+                if (popGe == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(popGe);
+            }
+        }
+
+        [Authorize]
+        [HttpPost, ActionName("PopraviGeslo")]
+        [ValidateAntiForgeryToken]
+        public ActionResult PopraviGesloShrani(UsersTable novoGeslo, Models.Users uporabnik)
+        {
+            try
+            {
+                //if (IsValid(uporabnik.Password))
+                //using (var dbGes = new userDbEntities())
+                //{
+                    
+                //}
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            return View(novoGeslo);
+        }
+
+        private bool IsValid(string userSol, string passSol)
+        {
+            var crypto = new SimpleCrypto.PBKDF2();
+            bool isValid = false;
+            using (var dbs = new userDbEntities())
+            {
+                var user = dbs.UsersTables.FirstOrDefault(u => u.username == userSol);
+                if (user != null)
+                {
+                    if (user.password == crypto.Compute(passSol, user.passwordSalt))
+                    {
+                        isValid = true;
+                    }
+                }
+            }
+            return isValid;
+        }
+
         private string GetSpellCheckingResult(SolrQueryResults<SpremenljivkeSolr> matchingSpremenljivke)
         {
             return string.Join(" ", matchingSpremenljivke.SpellChecking

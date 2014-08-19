@@ -358,6 +358,7 @@
     <Content Include="Views\LoginSimpleUser\Pagination.cshtml" />
     <Content Include="Views\LoginAdmin\Pagination.cshtml" />
     <Content Include="SolrNet.chm" />
+    <Content Include="Views\LoginUser\PopraviGeslo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -425,7 +425,7 @@ namespace AdminRole.Controllers
 
         public ActionResult CreateNewCustomerType()
         {
-            return View();
+            return View(new CustomerType());
         }
 
         //NI CUSTOMER AMPAK DESTIONATION - UPORABI ZA SOLR!!!
@@ -693,7 +693,7 @@ namespace AdminRole.Controllers
 
         public ActionResult CreateNewMessageType()
         {
-            return View();
+            return View(new KraticeTable());
         }
 
         [HttpPost]
